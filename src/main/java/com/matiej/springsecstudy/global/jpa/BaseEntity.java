@@ -19,7 +19,7 @@ public abstract class BaseEntity {
     private Long id;
     private String UUID = randomUUID().toString();
 //    @CreatedDate
-//    private LocalDateTime createdAt;
+    private LocalDateTime createdAt;
 //    @LastModifiedDate
 //    private LocalDateTime lastUpdatedAt;
 //    @Version
