@@ -23,6 +23,7 @@ public class CreateUserCommand {
     public UserEntity convertToUserEntity() {
         UserEntity userEntity = new UserEntity(this.username, "pass", "pass", this.email);
         userEntity.setCreatedAt(LocalDateTime.now());
+        userEntity.setId(this.id);
         return userEntity;
     }
 }
