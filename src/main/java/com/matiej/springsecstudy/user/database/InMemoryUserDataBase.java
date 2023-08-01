@@ -8,18 +8,23 @@ import org.springframework.stereotype.Component;
 import java.util.*;
 
 @Component
-public class InMemoryUserDataBase implements UserRepository{
+public class InMemoryUserDataBase implements UserRepository {
     private Map<String, UserEntity> userEntityMap = new HashMap<>();
 
     public UserEntity save(UserEntity user) {
-        Long userId = (long) (userEntityMap.size() + 1);
-        user.setId(userId);
-        userEntityMap.put(String.valueOf(userId), user);
+        if (user.getId() != null) {
+            userEntityMap.put(String.valueOf(user.getId()), user);
+
+        } else {
+            Long userId = (long) (userEntityMap.size() + 1);
+            userEntityMap.put(String.valueOf(userId), user);
+            user.setId(userId);
+        }
         return user;
     }
 
     public List<UserEntity> findAll() {
-        if(userEntityMap.isEmpty()) {
+        if (userEntityMap.isEmpty()) {
             return Collections.emptyList();
         }
         return userEntityMap.values().stream().toList();

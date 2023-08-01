@@ -4,6 +4,7 @@
 <head>
     <title>Users : View</title>
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" href="../../static/css/bootstrap.min.css" />
+    <link rel="icon" href="../../favicon.ico" type="image/x-icon">
 </head>
 <body>
 <h1 layout:fragment="header">Users : Create</h1>
@@ -26,8 +27,8 @@
         <dd id="email" th:text="${user.email}">Email</dd>
     </dl>
     <div class="pull-left">
-        <a href="users" th:href="@{'/delete/' + ${user.id}}">
-            delete </a> | <a href="form.html"
+        <a href="users" th:href="@{'/delete/' + ${user.id}}" style="color: red">
+            delete </a> | <a href="form.html" style="color: green"
                              th:href="@{'/modify/' + ${user.id}}"> modify </a>
     </div>
 </div>
