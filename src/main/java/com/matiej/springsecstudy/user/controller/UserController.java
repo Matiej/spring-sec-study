@@ -69,6 +69,12 @@ public class UserController {
         return new ModelAndView("users/form", "user", user);
     }
 
+    @GetMapping("/login")
+    public String loginPage() {
+//        return "loginp";
+        return "loginPage";
+    }
+
     @GetMapping("favicon.ico")
     @ResponseBody
     void returnNoFavicon() {

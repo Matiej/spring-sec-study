@@ -46,7 +46,8 @@ public class SecConfig {
                         .requestMatchers("/delete/**")
                         .hasAuthority("ADMIN")
                         .anyRequest().authenticated())
-                .formLogin();
+                .formLogin().loginPage("/login").permitAll()
+                .loginProcessingUrl("/do-logging");
         return http.build();
     }
 }
