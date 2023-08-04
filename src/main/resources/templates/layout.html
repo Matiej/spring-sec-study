@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <title>Layout</title>
-    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" href="../../resources/static/css/bootstrap.min.css" />
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" href="../../resources/static/css/bootstrap.min.css"/>
     <link rel="icon" href="../favicon.ico" type="image/x-icon">
 </head>
 <body>
@@ -14,11 +15,18 @@
                 <li><a th:href="@{/}" href="users/list.html"> Users </a></li>
             </ul>
             <ul class="nav pull-right">
-                <li><a th:href="@{/logout}" class="menu-right" > Logout </a></li>
+                <li><a th:href="@{/logout}" class="menu-right"> Logout </a></li>
+            </ul>
+            <ul class="nav pull-right">
+                <li>
+                    <a style="color: #62DBF6">User logged:
+                        <span sec:authentication="name">Bob</span>
+                    </a>
+                </li>
             </ul>
         </div>
     </div>
-    <section  layout:fragment="header">
+    <section layout:fragment="header">
         <h1>Layout</h1>
     </section>
     <div layout:fragment="content">Fake content</div>
