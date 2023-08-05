@@ -1,0 +1,36 @@
+body {
+  background: #94FFA2 !important;
+
+  font-family: 'Muli', sans-serif;
+}
+    table,th,td
+    {
+      border:2px solid #0C6619;
+    }
+    table
+    {
+
+      width:20%;
+       border:2px solid #0C6619;
+    }
+
+    table, thead, tbody{
+        border:2px solid #0C6619;
+    }
+
+    td
+    {
+      height:40px;
+    }
+    tr
+    {
+      background-color:#E9E9E9 ;
+      color:#3D5040 ;
+    }
+    th
+    {
+      background-color:#E2F3E4;
+      color:black;
+      text-align: center;
+      font-size: 150%;
+    }
