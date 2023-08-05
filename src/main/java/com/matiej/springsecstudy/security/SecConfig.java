@@ -43,6 +43,7 @@ public class SecConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/signup", "user/register").permitAll()
                         .requestMatchers("/delete/**")
                         .hasAuthority("ADMIN")
                         .anyRequest().authenticated())

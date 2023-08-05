@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -57,17 +58,38 @@ public class UserController {
         throw new RuntimeException("Expected exception in controller");
     }
 
-    @RequestMapping(value = "delete/{id}")
+    @GetMapping(value = "delete/{id}")
     public ModelAndView delete(@PathVariable("id") String id) {
         userService.deleteUser(Long.valueOf(id));
         return new ModelAndView("redirect:/");
     }
 
-    @RequestMapping(value = "modify/{id}", method = RequestMethod.GET)
+    @GetMapping(value = "modify/{id}")
     public ModelAndView modifyForm(@PathVariable("id") String id, CreateUserCommand user) {
         Long userId = Long.valueOf(id);
         return new ModelAndView("users/form", "user", user);
     }
+
+    @GetMapping(value = "/signup")
+    public ModelAndView registrationForm() {
+        return new ModelAndView("registrationPage", "user", new RegisterUserCommand());
+    }
+
+    @PostMapping(value = "user/register")
+    public ModelAndView registerUser(@Valid final RegisterUserCommand user, final BindingResult result) {
+        if (result.hasErrors()) {
+            return new ModelAndView("registrationPage", "user", user);
+        }
+        try {
+            UserQueryResponse userQueryResponse = userService.registerNewUser(user);
+        } catch (IllegalArgumentException e) {
+            result.addError(new FieldError("user", "email", e.getMessage()));
+            return new ModelAndView("registrationPage", "user", user);
+        }
+        return new ModelAndView("redirect:/login");
+    }
+
+
 
     @GetMapping("/login")
     public String loginPage() {

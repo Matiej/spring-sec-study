@@ -39,4 +39,12 @@ public class InMemoryUserDataBase implements UserRepository {
     public void delete(Long id) {
         userEntityMap.remove(String.valueOf(id));
     }
+
+    @Override
+    public Optional<UserEntity> findByEmail(String email) {
+        return userEntityMap.values()
+                .stream()
+                .filter(p-> email.equals(p.getEmail()))
+                .findAny();
+    }
 }

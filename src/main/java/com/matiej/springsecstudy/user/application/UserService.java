@@ -1,6 +1,7 @@
 package com.matiej.springsecstudy.user.application;
 
 import com.matiej.springsecstudy.user.controller.CreateUserCommand;
+import com.matiej.springsecstudy.user.controller.RegisterUserCommand;
 import com.matiej.springsecstudy.user.domain.UserEntity;
 
 import java.util.List;
@@ -14,4 +15,6 @@ public interface UserService {
     void deleteUser(Long id);
 
     Optional<UserQueryResponse> findById(Long id);
+
+    UserQueryResponse registerNewUser(RegisterUserCommand user);
 }
