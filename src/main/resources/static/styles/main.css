@@ -20,7 +20,8 @@ body {
 
     td
     {
-      height:40px;
+      height:20px;
+        border:2px solid #0C6619;
     }
     tr
     {
@@ -33,4 +34,5 @@ body {
       color:black;
       text-align: center;
       font-size: 150%;
+        border:2px solid #0C6619;
     }
