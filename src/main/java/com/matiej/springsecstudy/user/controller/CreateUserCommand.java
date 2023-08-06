@@ -22,7 +22,6 @@ public class CreateUserCommand {
 
     public UserEntity convertToUserEntity(PasswordEncoder passwordEncoder) {
         UserEntity userEntity = new UserEntity(this.username, passwordEncoder.encode("pass"), passwordEncoder.encode("pass"), this.email);
-        userEntity.setCreatedAt(LocalDateTime.now());
         userEntity.setId(this.id);
         return userEntity;
     }

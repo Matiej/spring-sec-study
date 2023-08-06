@@ -6,7 +6,6 @@ import com.matiej.springsecstudy.user.controller.CreateUserCommand;
 import com.matiej.springsecstudy.user.controller.RegisterUserCommand;
 import com.matiej.springsecstudy.user.database.UserRepository;
 import com.matiej.springsecstudy.user.domain.UserEntity;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -34,7 +33,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(Long id) {
-        repository.delete(id);
+        repository.deleteById(id);
     }
 
     @Override
@@ -54,7 +53,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<UserEntity> findByName(String username) {
-        return repository.findByName(username);
+        return repository.findByUsername(username);
 
     }
 

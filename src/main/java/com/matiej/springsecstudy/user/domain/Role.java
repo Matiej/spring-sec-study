@@ -1,6 +1,9 @@
 package com.matiej.springsecstudy.user.domain;
 
 import com.matiej.springsecstudy.global.jpa.BaseEntity;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToMany;
 import lombok.*;
 
 import java.util.HashSet;
@@ -10,12 +13,14 @@ import java.util.Set;
 @Getter
 @Setter
 @ToString
+@Entity
 @NoArgsConstructor
 public class Role extends BaseEntity {
+    @Column(unique = true)
     private String roleName;
-    //persistence mapping will come later with db
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
+    @ManyToMany(mappedBy = "roles", targetEntity = UserEntity.class)
     private Set<UserEntity> userEntities = new HashSet<>();
 
     public Role(String roleName) {
