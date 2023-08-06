@@ -2,10 +2,10 @@ package com.matiej.springsecstudy.user.controller;
 
 import com.matiej.springsecstudy.user.domain.UserEntity;
 import jakarta.validation.constraints.NotEmpty;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
 
@@ -20,8 +20,8 @@ public class CreateUserCommand {
     @NotEmpty(message = "Email is required.")
     private String email;
 
-    public UserEntity convertToUserEntity() {
-        UserEntity userEntity = new UserEntity(this.username, "pass", "pass", this.email);
+    public UserEntity convertToUserEntity(PasswordEncoder passwordEncoder) {
+        UserEntity userEntity = new UserEntity(this.username, passwordEncoder.encode("pass"), passwordEncoder.encode("pass"), this.email);
         userEntity.setCreatedAt(LocalDateTime.now());
         userEntity.setId(this.id);
         return userEntity;

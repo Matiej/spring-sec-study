@@ -4,6 +4,7 @@ import com.matiej.springsecstudy.user.domain.UserEntity;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
 
@@ -19,8 +20,8 @@ public class RegisterUserCommand {
     @NotEmpty(message = "matchingPassword is required.")
     private String matchingPassword;
 
-    public UserEntity toUserEntity() {
-        UserEntity userEntity = new UserEntity(this.username, this.password, this.matchingPassword, this.email);
+    public UserEntity toUserEntity(PasswordEncoder passwordEncoder) {
+        UserEntity userEntity = new UserEntity(this.username, passwordEncoder.encode(this.password), passwordEncoder.encode(this.matchingPassword), this.email);
         userEntity.setCreatedAt(LocalDateTime.now());
         return userEntity;
     }

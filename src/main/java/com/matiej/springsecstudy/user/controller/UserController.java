@@ -65,7 +65,7 @@ public class UserController {
     }
 
     @GetMapping(value = "modify/{id}")
-    public ModelAndView modifyForm(@PathVariable("id") String id, CreateUserCommand user) {
+    public ModelAndView modifyForm(@PathVariable("id") String id, ModifyUserCommand user) {
         Long userId = Long.valueOf(id);
         return new ModelAndView("users/form", "user", user);
     }

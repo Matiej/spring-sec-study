@@ -44,7 +44,16 @@ public class InMemoryUserDataBase implements UserRepository {
     public Optional<UserEntity> findByEmail(String email) {
         return userEntityMap.values()
                 .stream()
-                .filter(p-> email.equals(p.getEmail()))
+                .filter(p-> email.equalsIgnoreCase(p.getEmail()))
                 .findAny();
+    }
+
+    @Override
+    public Optional<UserEntity> findByName(String username) {
+        return userEntityMap.values()
+                .stream()
+                .filter(p -> username.equalsIgnoreCase(p.getUsername()))
+                .findAny();
+
     }
 }
