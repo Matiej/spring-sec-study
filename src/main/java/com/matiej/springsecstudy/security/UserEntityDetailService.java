@@ -1,7 +1,6 @@
 package com.matiej.springsecstudy.security;
 
 import com.matiej.springsecstudy.user.application.UserService;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

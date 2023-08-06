@@ -6,8 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.time.LocalDateTime;
-
 @Setter
 @Getter
 public class RegisterUserCommand {
@@ -21,8 +19,6 @@ public class RegisterUserCommand {
     private String matchingPassword;
 
     public UserEntity toUserEntity(PasswordEncoder passwordEncoder) {
-        UserEntity userEntity = new UserEntity(this.username, passwordEncoder.encode(this.password), passwordEncoder.encode(this.matchingPassword), this.email);
-        userEntity.setCreatedAt(LocalDateTime.now());
-        return userEntity;
+        return new UserEntity(this.username, passwordEncoder.encode(this.password), passwordEncoder.encode(this.matchingPassword), this.email);
     }
 }
