@@ -18,11 +18,13 @@ import java.util.Optional;
 @Slf4j
 @Controller
 @AllArgsConstructor
-@RequestMapping("/")
+@RequestMapping("/user")
 public class UserController {
     private final UserService userService;
 
-    @GetMapping
+
+
+    @GetMapping()
     public ModelAndView list() {
         List<UserQueryResponse> userQueryResponses = UserQueryResponse.convertToResponse(userService.findAll());
         return new ModelAndView("users/list", "users", userQueryResponses);
@@ -37,20 +39,20 @@ public class UserController {
 
     }
 
-    @GetMapping(params = "form")
+    @GetMapping(value = "/reg", params = "form")
     public String createForm(@ModelAttribute CreateUserCommand createUserCommand) {
         System.out.println(createUserCommand);
         return "users/form";
     }
 
-    @PostMapping
+    @PostMapping("/reg")
     public ModelAndView create(@Valid CreateUserCommand user, BindingResult result, RedirectAttributes redirect) {
         if (result.hasErrors()) {
             return new ModelAndView("users/form", "formErrors", result.getAllErrors());
         }
         UserQueryResponse savedUser = userService.save(user);
         redirect.addFlashAttribute("globalMessage", "Successfully created a new user");
-        return new ModelAndView("redirect:/{user.id}", "user.id", savedUser.getId());
+        return new ModelAndView("redirect:/user/{user.id}", "user.id", savedUser.getId());
     }
 
     @RequestMapping("foo")
@@ -70,31 +72,6 @@ public class UserController {
         return new ModelAndView("users/form", "user", user);
     }
 
-    @GetMapping(value = "/signup")
-    public ModelAndView registrationForm() {
-        return new ModelAndView("registrationPage", "user", new RegisterUserCommand());
-    }
-
-    @PostMapping(value = "user/register")
-    public ModelAndView registerUser(@Valid final RegisterUserCommand user, final BindingResult result) {
-        if (result.hasErrors()) {
-            return new ModelAndView("registrationPage", "user", user);
-        }
-        try {
-            UserQueryResponse userQueryResponse = userService.registerNewUser(user);
-        } catch (IllegalArgumentException e) {
-            result.addError(new FieldError("user", "email", e.getMessage()));
-            return new ModelAndView("registrationPage", "user", user);
-        }
-        return new ModelAndView("redirect:/login");
-    }
-
-
-
-    @GetMapping("/login")
-    public String loginPage() {
-        return "loginPage";
-    }
 
     @GetMapping("favicon.ico")
     @ResponseBody

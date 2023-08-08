@@ -36,3 +36,42 @@ body {
       font-size: 150%;
         border:2px solid #0C6619;
     }
+
+dd {
+  display: flex;
+  margin-left: 40px;
+   font-size: 14px;
+
+}
+dt {
+  font-size: 15px;
+  font-weight: bold;
+     border-top: 1px solid #000;
+}
+dl {
+box-shadow: 0px 4px 8px rgba(255, 0, 0, 0.1);
+ border-bottom: 3px solid #000;
+ border-left: 3px solid #000;
+ border-right: 3px solid #000;
+  padding: 10px;
+   margin: 10px;
+}
+
+.button-container {
+  display: flex;
+  align-items: center;
+}
+
+.button-space {
+  width: 64px;
+}
+
+.btn-custom {
+  background-color: #4D0571;
+  color: white;
+}
+
+
+.btn-custom:hover {
+  background-color: #DDC3EA; /* or a different shade of the color */
+}

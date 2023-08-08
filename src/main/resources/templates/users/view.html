@@ -3,7 +3,7 @@
       layout:decorator="layout">
 <head>
     <title>Users : View</title>
-<!--    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" href="../../static/css/bootstrap.min.css" />-->
+    <!--    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" href="../../static/css/bootstrap.min.css" />-->
     <link type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css">
     <link rel="icon" href="../../favicon.ico" type="image/x-icon">
     <link th:href="@{/styles/main.css}" rel="stylesheet"/>
@@ -12,27 +12,37 @@
 <h1 layout:fragment="header">Users : Create</h1>
 <div layout:fragment="content" class="container">
     <div class="alert alert-success" th:if="${globalMessage}"
-         th:text="${globalMessage}">Some Success message</div>
-    <div class="pull-right">
-        <a th:href="@{/}" href="list.html"> Users </a>
+         th:text="${globalMessage}">Some Success message
     </div>
-    <dl>
-        <dt>ID</dt>
-        <dd id="id" th:text="${user.id}">123</dd>
-        <dt>Date</dt>
-        <dd id="created" th:text="${#temporals.format(user.createdAt, 'yyyy/MM/dd HH:mm:ss')}">
-            July 11, 2012 2:17:16 PM CDT</dd>
-        <dt>Username</dt>
-        <dd id="username" th:text="${user.username}">Username
-        </dd>
-        <dt>Email</dt>
-        <dd id="email" th:text="${user.email}">Email</dd>
-    </dl>
-    <div class="pull-left">
-        <a href="" th:href="@{'/delete/' + ${user.id}}" style="color: red">
-            delete </a> | <a href="form.html" style="color: green"
-                             th:href="@{'/modify/' + ${user.id}}"> modify </a>
+    <hr>
+    <div>
+        <dl>
+            <dt>-ID:</dt>
+            <dd id="id" th:text="${user.id}">123</dd>
+            <dt>-Date:</dt>
+            <dd id="created" th:text="${#temporals.format(user.createdAt, 'yyyy/MM/dd HH:mm:ss')}">
+                July 11, 2012 2:17:16 PM CDT
+            </dd>
+            <dt>-Username:</dt>
+            <dd id="username" th:text="${user.username}">Username
+            </dd>
+            <dt>-Email:</dt>
+            <dd id="email" th:text="${user.email}">Email</dd>
+        </dl>
+        <div class="button-container">
+            <a type="button" class="btn btn-danger"
+               href="" th:href="@{'/user/delete/' + ${user.id}}"
+            >Delete
+            </a>
+            <div class="button-space"></div>
+            <a type="button" class="btn btn-warning"
+               href="form.html" style="color: green"
+               th:href="@{'/user/modify/' + ${user.id}}"
+            >Modify
+            </a>
+        </div>
     </div>
+    <hr>
 </div>
 </body>
 </html>

@@ -11,9 +11,11 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 @Configuration
 @EnableWebSecurity
@@ -22,6 +24,14 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecConfig {
     private final UserService userService;
     private final DefaultAdmin defaultAdmin;
+    private static final String[] PERMIT_ALL = {
+            "/styles/**",
+            "/h2-console/**",
+            "/h2-console*",
+            "/signup",
+            "/forgotPassword*"
+
+    };
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -44,16 +54,17 @@ public class SecConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/h2-console/**").permitAll()
-                        .requestMatchers("/h2-console*").permitAll()
-                        .requestMatchers("/signup", "user/register").permitAll()
-                        .requestMatchers("/delete/**").hasAuthority("ADMIN").anyRequest().authenticated())
+        http.headers().frameOptions().sameOrigin(); //important for h2 console
+        http.anonymous().disable()
+                .csrf(AbstractHttpConfigurer::disable)// impornat for h2 database console
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(PERMIT_ALL).permitAll()
+                        .requestMatchers("/delete/**").hasAuthority("ADMIN")
+                        .anyRequest().authenticated())
                 .formLogin().loginPage("/login").permitAll().loginProcessingUrl("/do-logging")
                 .and()
-                .logout().permitAll().logoutUrl("logout").logoutSuccessUrl("/do-logout");
+                .logout().permitAll().logoutUrl("/logout").logoutSuccessUrl("/");
         return http.build();
     }
-
 
 }
