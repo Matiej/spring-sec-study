@@ -10,17 +10,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Getter
 @Setter
 @NoArgsConstructor
-public class CreateUserCommand {
+public class CreateUserCommand extends UserCommand {
 
-    private Long id;
-    @NotEmpty(message = "Username is required.")
-    private String username;
-    @NotEmpty(message = "Email is required.")
-    private String email;
-
-    public UserEntity convertToUserEntity(PasswordEncoder passwordEncoder) {
-        UserEntity userEntity = new UserEntity(this.username, passwordEncoder.encode("pass"), passwordEncoder.encode("pass"), this.email);
-        userEntity.setId(this.id);
+    public UserEntity convertToUserEntity(PasswordEncoder passwordEncoder, boolean isEnabled) {
+        UserEntity userEntity = new UserEntity(this.username, passwordEncoder.encode("pass"),
+                passwordEncoder.encode("pass"), this.email);
+        userEntity.setEnabled(isEnabled);
         return userEntity;
     }
 }
