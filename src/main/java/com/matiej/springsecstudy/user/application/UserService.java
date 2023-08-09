@@ -1,6 +1,7 @@
 package com.matiej.springsecstudy.user.application;
 
 import com.matiej.springsecstudy.user.controller.CreateUserCommand;
+import com.matiej.springsecstudy.user.controller.ModifyUserCommand;
 import com.matiej.springsecstudy.user.controller.RegisterUserCommand;
 import com.matiej.springsecstudy.user.domain.UserEntity;
 
@@ -19,4 +20,7 @@ public interface UserService {
     UserQueryResponse registerNewUser(RegisterUserCommand user);
 
     Optional<UserEntity> findByName(String username);
+    Optional<UserQueryResponse> findByEmail(String email);
+
+    UserQueryResponse update(ModifyUserCommand user);
 }

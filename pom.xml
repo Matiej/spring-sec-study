@@ -6,7 +6,6 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.0.5</version>
-<!--        needed to downgrade springboot, many security mehtonds are downgraded or don't exist, not easy to learn this way-->
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 

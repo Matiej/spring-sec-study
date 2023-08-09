@@ -12,7 +12,7 @@
 <h1 layout:fragment="header">List of all Users</h1>
 <div layout:fragment="content" class="container">
     <div class="pull-right">
-        <a type="button" class="btn btn-primary " href="form.html" th:href="@{/user/reg(form)}">Create User</a>
+        <a type="button" class="btn btn-primary " href="form.html" th:href="@{/user(form)}">Create User</a>
     </div>
     <table class="table table-bordered table-striped">
         <thead>
@@ -26,7 +26,7 @@
             <td colspan="3">No users</td>
         </tr>
         <tr th:each="user : ${users}">
-            <td><a style="color: black" href="view.html" th:href="@{'/' + ${user.id}}" th:text="${user.username}">
+            <td><a style="color: black" href="view.html" th:href="@{'user/' + ${user.id}}" th:text="${user.username}">
                 Username </a></td>
             <td th:text="${#temporals.format(user.createdAt, 'yyyy/MM/dd HH:mm:ss')}">July 11, 2012 2:17:16 PM CDT</td>
         </tr>

@@ -22,8 +22,6 @@ public class UserEntity extends BaseEntity {
     @JsonIgnore
     private String matchingPassword;
     private String email;
-    //persistence mapping will come later with
-    // db
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
@@ -31,6 +29,7 @@ public class UserEntity extends BaseEntity {
             joinColumns = {@JoinColumn(name = "user_id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id")})
     private Set<Role> roles = new HashSet<>();
+    private Boolean enabled;
 
     public UserEntity(String username, String password, String matchingPassword, String email) {
         this.username = username;

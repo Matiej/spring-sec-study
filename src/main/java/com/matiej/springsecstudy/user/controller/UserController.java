@@ -39,19 +39,34 @@ public class UserController {
 
     }
 
-    @GetMapping(value = "/reg", params = "form")
+    @GetMapping(params = "form")
     public String createForm(@ModelAttribute CreateUserCommand createUserCommand) {
         System.out.println(createUserCommand);
         return "users/form";
     }
 
-    @PostMapping("/reg")
+    @GetMapping(params = "form-mod")
+    public String modify(@ModelAttribute ModifyUserCommand modifyUserCommand) {
+        return "users/form-mod";
+    }
+
+    @PostMapping()
     public ModelAndView create(@Valid CreateUserCommand user, BindingResult result, RedirectAttributes redirect) {
         if (result.hasErrors()) {
             return new ModelAndView("users/form", "formErrors", result.getAllErrors());
         }
         UserQueryResponse savedUser = userService.save(user);
         redirect.addFlashAttribute("globalMessage", "Successfully created a new user");
+        return new ModelAndView("redirect:/user/{user.id}", "user.id", savedUser.getId());
+    }
+
+    @PostMapping(value = "/mod")
+    public ModelAndView modify(@Valid ModifyUserCommand user, BindingResult result, RedirectAttributes redirect) {
+        if (result.hasErrors()) {
+            return new ModelAndView("users/form-mod", "formErrors", result.getAllErrors());
+        }
+        UserQueryResponse savedUser = userService.update(user);
+        redirect.addFlashAttribute("globalMessage", "Successfully modified user");
         return new ModelAndView("redirect:/user/{user.id}", "user.id", savedUser.getId());
     }
 
@@ -69,7 +84,7 @@ public class UserController {
     @GetMapping(value = "modify/{id}")
     public ModelAndView modifyForm(@PathVariable("id") String id, ModifyUserCommand user) {
         Long userId = Long.valueOf(id);
-        return new ModelAndView("users/form", "user", user);
+        return new ModelAndView("users/form-mod", "user", user);
     }
 
 
