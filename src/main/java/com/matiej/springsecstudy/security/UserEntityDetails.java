@@ -53,6 +53,6 @@ public class UserEntityDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return userEntity.getEnabled();
     }
 }
