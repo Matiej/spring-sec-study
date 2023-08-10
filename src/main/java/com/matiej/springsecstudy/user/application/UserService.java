@@ -1,8 +1,8 @@
 package com.matiej.springsecstudy.user.application;
 
-import com.matiej.springsecstudy.user.controller.CreateUserCommand;
-import com.matiej.springsecstudy.user.controller.ModifyUserCommand;
-import com.matiej.springsecstudy.user.controller.RegisterUserCommand;
+import com.matiej.springsecstudy.user.controller.command.CreateUserCommand;
+import com.matiej.springsecstudy.user.controller.command.ModifyUserCommand;
+import com.matiej.springsecstudy.user.controller.command.RegisterUserCommand;
 import com.matiej.springsecstudy.user.domain.UserEntity;
 
 import java.util.List;

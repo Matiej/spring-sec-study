@@ -2,12 +2,13 @@ package com.matiej.springsecstudy.user.controller;
 
 import com.matiej.springsecstudy.user.application.UserQueryResponse;
 import com.matiej.springsecstudy.user.application.UserService;
+import com.matiej.springsecstudy.user.controller.command.CreateUserCommand;
+import com.matiej.springsecstudy.user.controller.command.ModifyUserCommand;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -70,9 +71,10 @@ public class UserController {
         return new ModelAndView("redirect:/user/{user.id}", "user.id", savedUser.getId());
     }
 
-    @RequestMapping("foo")
-    public String foo() {
-        throw new RuntimeException("Expected exception in controller");
+    @GetMapping(value = "modify/{id}")
+    public ModelAndView modifyForm(@PathVariable("id") String id, ModifyUserCommand user) {
+        Long userId = Long.valueOf(id);
+        return new ModelAndView("users/form-mod", "user", user);
     }
 
     @GetMapping(value = "delete/{id}")
@@ -80,13 +82,6 @@ public class UserController {
         userService.deleteUser(Long.valueOf(id));
         return new ModelAndView("redirect:/");
     }
-
-    @GetMapping(value = "modify/{id}")
-    public ModelAndView modifyForm(@PathVariable("id") String id, ModifyUserCommand user) {
-        Long userId = Long.valueOf(id);
-        return new ModelAndView("users/form-mod", "user", user);
-    }
-
 
     @GetMapping("favicon.ico")
     @ResponseBody

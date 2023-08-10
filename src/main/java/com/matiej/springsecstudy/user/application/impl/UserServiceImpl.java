@@ -1,15 +1,19 @@
 package com.matiej.springsecstudy.user.application.impl;
 
+import com.matiej.springsecstudy.email.EmailType;
+import com.matiej.springsecstudy.email.application.EmailService;
+import com.matiej.springsecstudy.email.application.SendEmailCommand;
 import com.matiej.springsecstudy.user.application.UserQueryResponse;
 import com.matiej.springsecstudy.user.application.UserService;
-import com.matiej.springsecstudy.user.controller.CreateUserCommand;
-import com.matiej.springsecstudy.user.controller.ModifyUserCommand;
-import com.matiej.springsecstudy.user.controller.RegisterUserCommand;
+import com.matiej.springsecstudy.user.controller.command.CreateUserCommand;
+import com.matiej.springsecstudy.user.controller.command.ModifyUserCommand;
+import com.matiej.springsecstudy.user.controller.command.RegisterUserCommand;
 import com.matiej.springsecstudy.user.database.UserRepository;
 import com.matiej.springsecstudy.user.database.VerificationTokenRepository;
 import com.matiej.springsecstudy.user.domain.UserEntity;
 import com.matiej.springsecstudy.user.domain.VerificationToken;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -28,6 +32,7 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final VerificationTokenRepository tokenRepository;
+    private final EmailService emailService;
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Override
@@ -53,6 +58,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserQueryResponse registerNewUser(RegisterUserCommand user) {
         if (isUserExist(user.getEmail())) {
             throw new IllegalArgumentException("There is an account with email: " + user.getEmail());
@@ -62,14 +68,18 @@ public class UserServiceImpl implements UserService {
         String randomToken = UUID.randomUUID().toString();
         VerificationToken verificationToken = new VerificationToken(randomToken, savedUser, LocalDateTime.now().plusYears(2));
         VerificationToken savedToken = tokenRepository.save(verificationToken);
+        final String urlToClick = generateVerifyLink(user.getRequest(), savedToken.getToken());
+
+        emailService.sendEmail(new SendEmailCommand(EmailType.ACTIVATE, savedUser.getEmail(), urlToClick));
+
+        //todo to delete loging here!!
         log.info("SavedToken id: " + savedToken.getId() + ", token: " + savedToken.getToken() + "verify url: "
-                + generateVerifyLink(user.getRequest()));
-//todo EMAIL SENDING !!!
+                + urlToClick);
         return UserQueryResponse.convertToResponse(savedUser);
     }
 
-    private String generateVerifyLink(HttpServletRequest request) {
-        return "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+    private String generateVerifyLink(HttpServletRequest request, String token) {
+        return "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/registrationConfirm?token=" + token;
     }
 
     @Override
