@@ -28,9 +28,10 @@ public class SecConfig {
             "/styles/**",
             "/h2-console/**",
             "/h2-console*",
-            "/signup",
-            "/forgotPassword*",
-            "/forgotPassword/**"
+            "/reg/signup",
+            "/reg/forgotPassword*",
+            "/reg/forgotPassword/**",
+            "/reg/resetPassword/**", "/reg/resetPassword*"
 
     };
 
@@ -62,7 +63,7 @@ public class SecConfig {
                         .requestMatchers(PERMIT_ALL).permitAll()
                         .requestMatchers("/delete/**").hasAuthority("ADMIN")
                         .anyRequest().authenticated())
-                .formLogin().loginPage("/login").permitAll().loginProcessingUrl("/do-logging")
+                .formLogin().loginPage("/reg/login").permitAll().loginProcessingUrl("/do-logging")
                 .and()
                 .logout().permitAll().logoutUrl("/logout").logoutSuccessUrl("/");
         return http.build();
