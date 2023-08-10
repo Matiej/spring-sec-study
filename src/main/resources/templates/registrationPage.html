@@ -16,7 +16,7 @@ body {
 <body>
 <div class="container">
     <h1>Registration page</h1>
-    <form id="userForm" th:action="@{/user/register}" th:object="${user}" action="#" method="post" class="form-horizontal">
+    <form id="userForm" th:action="@{/reg/register}" th:object="${user}" action="#" method="post" class="form-horizontal">
         <div th:if="${#fields.hasErrors('global')}" th:errors="*{global}" class="alert alert-danger">Incorrect password confirmation</div>
 
 <!--        <input type="hidden" th:field="*{id}"/>-->

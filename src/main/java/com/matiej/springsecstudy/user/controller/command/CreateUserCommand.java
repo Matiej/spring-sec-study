@@ -1,7 +1,6 @@
-package com.matiej.springsecstudy.user.controller;
+package com.matiej.springsecstudy.user.controller.command;
 
 import com.matiej.springsecstudy.user.domain.UserEntity;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
