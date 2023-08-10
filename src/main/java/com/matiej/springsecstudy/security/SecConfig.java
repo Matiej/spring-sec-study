@@ -29,8 +29,11 @@ public class SecConfig {
             "/h2-console/**",
             "/h2-console*",
             "/reg/signup",
+            "/reg/signup*",
+            "/reg/signup/**",
             "/reg/forgotPassword*",
             "/reg/forgotPassword/**",
+            "/reg/register/**",
             "/reg/resetPassword/**", "/reg/resetPassword*"
 
     };
