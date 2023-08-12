@@ -13,17 +13,20 @@ import java.util.Objects;
 @Setter
 @Entity
 @NoArgsConstructor
-public class VerificationToken extends BaseEntity {
+public class UserToken extends BaseEntity {
     private String token;
-    @OneToOne(targetEntity = UserEntity.class)
+    @ManyToOne()
     @JoinColumn(nullable = false, name = "user_id")
     private UserEntity user;
     private LocalDateTime expiryDate;
+    @Enumerated
+    private TokenType tokenType;
 
-    public VerificationToken(String token, UserEntity user, LocalDateTime expiryDate) {
+    public UserToken(String token, UserEntity user, LocalDateTime expiryDate, TokenType tokenType) {
         this.token = token;
         this.user = user;
         this.expiryDate = expiryDate;
+        this.tokenType = tokenType;
     }
 
     @Override
@@ -31,7 +34,7 @@ public class VerificationToken extends BaseEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
-        VerificationToken that = (VerificationToken) o;
+        UserToken that = (UserToken) o;
         return Objects.equals(token, that.token) && Objects.equals(user, that.user) && Objects.equals(expiryDate, that.expiryDate);
     }
 
