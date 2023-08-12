@@ -27,6 +27,10 @@ public class Role extends BaseEntity {
         this.roleName = roleName;
     }
 
+    public Role(RoleType roleType) {
+        this.roleName = roleType.name();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

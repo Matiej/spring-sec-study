@@ -30,6 +30,8 @@ public class UserEntity extends BaseEntity {
             inverseJoinColumns = {@JoinColumn(name = "role_id")})
     private Set<Role> roles = new HashSet<>();
     private Boolean enabled;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private VerificationToken token;
 
     public UserEntity(String username, String password, String matchingPassword, String email) {
         this.username = username;
