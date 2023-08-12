@@ -91,7 +91,7 @@ public class UserController {
                                      @RequestParam("passwordConfirmation") final String passwordConfirmation,
                                      @RequestParam("token") final String token, RedirectAttributes redirectAttributes) {
         if (!password.equals(passwordConfirmation)) {
-            return new ModelAndView("resetPassword", Map.of("errorMessage", "Passwords do not match"));
+            return new ModelAndView("/reg/resetPassword", Map.of("errorMessage", "Passwords do not match"));
         }
         return userService.getPasswordResetToken(token).map(passwordResetToken -> {
             if (passwordResetToken.getUser() == null) {
