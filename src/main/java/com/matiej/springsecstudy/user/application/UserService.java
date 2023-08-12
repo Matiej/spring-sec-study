@@ -23,4 +23,6 @@ public interface UserService {
     Optional<UserQueryResponse> findByEmail(String email);
 
     UserQueryResponse update(ModifyUserCommand user);
+
+    void confirmRegistration(String token);
 }

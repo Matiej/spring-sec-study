@@ -10,6 +10,8 @@ import com.matiej.springsecstudy.user.controller.command.ModifyUserCommand;
 import com.matiej.springsecstudy.user.controller.command.RegisterUserCommand;
 import com.matiej.springsecstudy.user.database.UserRepository;
 import com.matiej.springsecstudy.user.database.VerificationTokenRepository;
+import com.matiej.springsecstudy.user.domain.Role;
+import com.matiej.springsecstudy.user.domain.RoleType;
 import com.matiej.springsecstudy.user.domain.UserEntity;
 import com.matiej.springsecstudy.user.domain.VerificationToken;
 import jakarta.servlet.http.HttpServletRequest;
@@ -63,7 +65,7 @@ public class UserServiceImpl implements UserService {
         if (isUserExist(user.getEmail())) {
             throw new IllegalArgumentException("There is an account with email: " + user.getEmail());
         }
-        UserEntity savedUser = userRepository.save(user.convertToUserEntity(passwordEncoder, false));
+        UserEntity savedUser = userRepository.save(user.convertToUserEntity(passwordEncoder, false, new Role(RoleType.USER)));
 
         String randomToken = UUID.randomUUID().toString();
         VerificationToken verificationToken = new VerificationToken(randomToken, savedUser, LocalDateTime.now().plusYears(2));
@@ -72,14 +74,11 @@ public class UserServiceImpl implements UserService {
 
         emailService.sendEmail(new SendEmailCommand(EmailType.ACTIVATE, savedUser.getEmail(), urlToClick));
 
-        //todo to delete loging here!!
-        log.info("SavedToken id: " + savedToken.getId() + ", token: " + savedToken.getToken() + "verify url: "
-                + urlToClick);
         return UserQueryResponse.convertToResponse(savedUser);
     }
 
     private String generateVerifyLink(HttpServletRequest request, String token) {
-        return "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/registrationConfirm?token=" + token;
+        return "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/reg/registerConfirm?token=" + token;
     }
 
     @Override
@@ -102,7 +101,21 @@ public class UserServiceImpl implements UserService {
             userEntity.setEmail(user.getEmail());
             UserEntity savedUser = userRepository.save(userEntity);
             return UserQueryResponse.convertToResponse(savedUser);
-        }).orElseThrow(()-> new UsernameNotFoundException("Can't find user: " + user.getUsername()));
+        }).orElseThrow(() -> new UsernameNotFoundException("Can't find user: " + user.getUsername()));
+    }
+
+    @Override
+    public void confirmRegistration(String token) {
+        tokenRepository.findByToken(token)
+                .ifPresentOrElse(tk -> {
+                    UserEntity user = tk.getUser();
+                    user.setEnabled(true);
+                    userRepository.save(user);
+                    log.info("Activation success for user: " + user.getUsername());
+                }, () -> {
+                    throw new IllegalArgumentException("Can't find given token, user not activated");
+                });
+
     }
 
     private boolean isUserExist(String email) {

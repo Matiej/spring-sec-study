@@ -7,14 +7,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.Map;
 
 @Controller
 @RequestMapping(value = "/reg")
@@ -27,8 +27,8 @@ public class RegistrationController {
     }
 
     @PostMapping(value = "/register")
-    public ModelAndView registerUser(@Valid RegisterUserCommand user, BindingResult result,
-                                     HttpServletRequest request) {
+    public ModelAndView registerUser(@Valid final RegisterUserCommand user, final BindingResult result,
+                                     final HttpServletRequest request, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             return new ModelAndView("registrationPage", "user", user);
         }
@@ -39,11 +39,21 @@ public class RegistrationController {
             result.addError(new FieldError("user", "email", e.getMessage()));
             return new ModelAndView("registrationPage", "user", user);
         }
-        return new ModelAndView("redirect:/login");
+        redirectAttributes.addFlashAttribute("message", "Activation email has been sent to: " + user.getEmail());
+        return new ModelAndView("redirect:/reg/login");
     }
 
+    @GetMapping(value = "/registerConfirm")
+    public ModelAndView registrationConfirm(final Model model, @RequestParam("token") final String token,
+    RedirectAttributes redirectAttributes) {
+        userService.confirmRegistration(token);
+        redirectAttributes.addFlashAttribute("message", "Your account verified successfully and activated");
+        return new ModelAndView("redirect:/reg/login");
+    }
+
+
     @PostMapping(value = "/resetPassword")
-    public ModelAndView resetPassword(HttpServletRequest request, @RequestParam("email") String email,
+    public ModelAndView resetPassword(final HttpServletRequest request, @RequestParam("email") final String email,
                                       RedirectAttributes redirectAttributes) {
 //        userService.findByEmail(email).map(userQueryResponse -> {
 //            String token = UUID.randomUUID().toString();
@@ -56,12 +66,13 @@ public class RegistrationController {
 
 
     @GetMapping(value = "/forgotPassword")
-    public String forgotPassword(HttpServletRequest request) {
+    public String forgotPassword(final HttpServletRequest request) {
         return "forgotPassword";
     }
 
     @GetMapping("/login")
-    public String loginPage() {
+    public String loginPage(@ModelAttribute("message") String message, Model model) {
+        model.addAttribute("message", message);
         return "loginPage";
     }
 

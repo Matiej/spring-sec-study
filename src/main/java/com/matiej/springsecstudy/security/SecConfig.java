@@ -33,7 +33,8 @@ public class SecConfig {
             "/reg/forgotPassword*",
             "/reg/forgotPassword/**",
             "/reg/register/**",
-            "/reg/resetPassword/**", "/reg/resetPassword*"
+            "/reg/resetPassword/**", "/reg/resetPassword*",
+            "/reg/registerConfirm/**", "/reg/registerConfirm*"
 
     };
 
