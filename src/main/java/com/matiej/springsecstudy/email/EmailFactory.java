@@ -5,12 +5,12 @@ import com.matiej.springsecstudy.email.application.SendEmailCommand;
 public class EmailFactory {
 
     public static Email createEmail(SendEmailCommand command, SendingService sendingService) {
-        switch (command.getEmailType()) {
-            case ACTIVATE:
-                return new ActivateEmail(command.getRecipient(), command.getUrlToClick(), sendingService);
-            default:
-                throw new IllegalArgumentException("Invalid email type");
-        }
+        return switch (command.getEmailType()) {
+            case ACTIVATE -> new ActivateEmail(command.getRecipient(), command.getUrlToClick(), sendingService);
+            case PASSWORD_RESET ->
+                    new PasswordResetEmail(command.getRecipient(), command.getUrlToClick(), sendingService);
+            default -> throw new IllegalArgumentException("Invalid email type");
+        };
     }
 
 

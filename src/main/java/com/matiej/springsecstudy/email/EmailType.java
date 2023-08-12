@@ -1,5 +1,5 @@
 package com.matiej.springsecstudy.email;
 
 public enum EmailType {
-    ACTIVATE;
+    ACTIVATE, PASSWORD_RESET;
 }
