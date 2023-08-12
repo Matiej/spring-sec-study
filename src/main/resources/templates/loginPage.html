@@ -50,6 +50,13 @@ text-decoration: underline;
 <div class="pt-5">
     <h1 class="text-center" style="color: #CEDECA">Spring sec study, Bootstrap4 login form</h1>
     <div class="container">
+
+        <div th:if="${param.error}" th:text="${session.SPRING_SECURITY_LAST_EXCEPTION.message}" class="alert alert-danger">Login Error</div>
+        <div style="background-color: #28a745 ; font-weight: bold; color: #F4FFE8;" th:if="${!#strings.isEmpty(message) and #strings.length(message) > 0}"
+             th:text="${message}" class="alert alert-success">Message</div>
+        <div th:if="${errorMessage}" th:text="${errorMessage}" class="alert alert-danger">Error Message</div>
+        <div th:if="${param.logout}" class="alert alert-success">You have been logged out.</div>
+        
         <div class="row">
             <div class="col-md-5 mx-auto" >
                 <div class="card card-body" style="background-color: #CEDECA">
