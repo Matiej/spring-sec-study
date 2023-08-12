@@ -4,6 +4,8 @@ import com.matiej.springsecstudy.user.controller.command.CreateUserCommand;
 import com.matiej.springsecstudy.user.controller.command.ModifyUserCommand;
 import com.matiej.springsecstudy.user.controller.command.RegisterUserCommand;
 import com.matiej.springsecstudy.user.domain.UserEntity;
+import com.matiej.springsecstudy.user.domain.UserToken;
+import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,4 +27,9 @@ public interface UserService {
     UserQueryResponse update(ModifyUserCommand user);
 
     void confirmRegistration(String token);
+    void resetPassword(String userEmail, HttpServletRequest request);
+
+    Optional<UserToken> getPasswordResetToken(String token);
+
+    void changeUserPassword(UserEntity user, String password);
 }

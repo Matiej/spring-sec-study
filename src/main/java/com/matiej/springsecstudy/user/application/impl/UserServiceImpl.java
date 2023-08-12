@@ -10,10 +10,7 @@ import com.matiej.springsecstudy.user.controller.command.ModifyUserCommand;
 import com.matiej.springsecstudy.user.controller.command.RegisterUserCommand;
 import com.matiej.springsecstudy.user.database.UserRepository;
 import com.matiej.springsecstudy.user.database.VerificationTokenRepository;
-import com.matiej.springsecstudy.user.domain.Role;
-import com.matiej.springsecstudy.user.domain.RoleType;
-import com.matiej.springsecstudy.user.domain.UserEntity;
-import com.matiej.springsecstudy.user.domain.VerificationToken;
+import com.matiej.springsecstudy.user.domain.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -65,13 +62,14 @@ public class UserServiceImpl implements UserService {
         if (isUserExist(user.getEmail())) {
             throw new IllegalArgumentException("There is an account with email: " + user.getEmail());
         }
-        UserEntity savedUser = userRepository.save(user.convertToUserEntity(passwordEncoder, false, new Role(RoleType.USER)));
+        UserEntity userEntity = user.convertToUserEntity(passwordEncoder, false, new Role(RoleType.USER));
 
         String randomToken = UUID.randomUUID().toString();
-        VerificationToken verificationToken = new VerificationToken(randomToken, savedUser, LocalDateTime.now().plusYears(2));
-        VerificationToken savedToken = tokenRepository.save(verificationToken);
-        final String urlToClick = generateVerifyLink(user.getRequest(), savedToken.getToken());
+        UserToken userToken = new UserToken(randomToken, userEntity, LocalDateTime.now().plusYears(2), TokenType.ACTIVATION);
+        userEntity.addToken(userToken);
+        UserEntity savedUser = userRepository.save(userEntity);
 
+        final String urlToClick = generateVerifyLink(user.getRequest(), userToken.getToken());
         emailService.sendEmail(new SendEmailCommand(EmailType.ACTIVATE, savedUser.getEmail(), urlToClick));
 
         return UserQueryResponse.convertToResponse(savedUser);
@@ -115,7 +113,35 @@ public class UserServiceImpl implements UserService {
                 }, () -> {
                     throw new IllegalArgumentException("Can't find given token, user not activated");
                 });
+    }
 
+    @Override
+    @Transactional
+    public void resetPassword(String userEmail, HttpServletRequest request) {
+        userRepository.findByEmail(userEmail).ifPresentOrElse(user -> {
+            String token = UUID.randomUUID().toString();
+            UserToken userToken = new UserToken(token, user, LocalDateTime.now().plusMinutes(30), TokenType.PASSWORD_RESET_TOKEN);
+            tokenRepository.save(userToken);
+            user.addToken(userToken);
+            userRepository.save(user);
+            String ulrToClick = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() +
+                    "/reg/changePassword?id=" + user.getId() + "&token=" + token;
+            emailService.sendEmail(new SendEmailCommand(EmailType.PASSWORD_RESET, user.getEmail(), ulrToClick));
+        }, () -> {
+            throw new IllegalArgumentException("User: " + emailService + " not found");
+        });
+    }
+
+    @Override
+    public Optional<UserToken> getPasswordResetToken(String token) {
+        return tokenRepository.findByToken(token);
+    }
+
+    @Override
+    public void changeUserPassword(UserEntity user, String password) {
+        user.setPassword(passwordEncoder.encode(password));
+        user.setMatchingPassword(passwordEncoder.encode(password));
+        userRepository.save(user);
     }
 
     private boolean isUserExist(String email) {
