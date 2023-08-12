@@ -7,6 +7,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Date;
 
 @Slf4j
@@ -20,6 +21,7 @@ public class SendingService {
         SimpleMailMessage simpleMailMessage = constructEmailMessage(request);
         try {
             mailSender.send(simpleMailMessage);
+            log.info("Email has been sent successful to: " + Arrays.toString(simpleMailMessage.getTo()));
         } catch (Exception e) {
             log.error("Failed send activation email to: " + request.getRecipient());
         }

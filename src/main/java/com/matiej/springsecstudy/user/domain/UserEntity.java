@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.matiej.springsecstudy.global.jpa.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.apache.catalina.User;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -30,6 +31,8 @@ public class UserEntity extends BaseEntity {
             inverseJoinColumns = {@JoinColumn(name = "role_id")})
     private Set<Role> roles = new HashSet<>();
     private Boolean enabled;
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST,CascadeType.PERSIST, CascadeType.REMOVE})
+    private Set<UserToken> tokens = new HashSet<>();
 
     public UserEntity(String username, String password, String matchingPassword, String email) {
         this.username = username;
@@ -57,5 +60,9 @@ public class UserEntity extends BaseEntity {
 
     public void removeRole(Role role) {
         this.roles.remove(role);
+    }
+
+    public void addToken(UserToken token) {
+        this.tokens.add(token);
     }
 }

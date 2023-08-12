@@ -33,8 +33,10 @@ public class SecConfig {
             "/reg/forgotPassword*",
             "/reg/forgotPassword/**",
             "/reg/register/**",
-            "/reg/resetPassword/**", "/reg/resetPassword*"
-
+            "/reg/resetPassword/**", "/reg/resetPassword*",
+            "/reg/registerConfirm/**", "/reg/registerConfirm*",
+            "/reg/changePassword/**", "/reg/changePassword*",
+            "/user/savePassword/**", "/user/savePassword*"
     };
 
     @Bean

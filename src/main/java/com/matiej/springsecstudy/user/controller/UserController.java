@@ -4,6 +4,8 @@ import com.matiej.springsecstudy.user.application.UserQueryResponse;
 import com.matiej.springsecstudy.user.application.UserService;
 import com.matiej.springsecstudy.user.controller.command.CreateUserCommand;
 import com.matiej.springsecstudy.user.controller.command.ModifyUserCommand;
+import com.matiej.springsecstudy.user.domain.UserToken;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -22,7 +25,6 @@ import java.util.Optional;
 @RequestMapping("/user")
 public class UserController {
     private final UserService userService;
-
 
 
     @GetMapping()
@@ -81,6 +83,27 @@ public class UserController {
     public ModelAndView delete(@PathVariable("id") String id) {
         userService.deleteUser(Long.valueOf(id));
         return new ModelAndView("redirect:/");
+    }
+
+    @PostMapping(value = "/savePassword")
+    @ResponseBody
+    public ModelAndView savePassword(@RequestParam("password") final String password,
+                                     @RequestParam("passwordConfirmation") final String passwordConfirmation,
+                                     @RequestParam("token") final String token, RedirectAttributes redirectAttributes) {
+        if (!password.equals(passwordConfirmation)) {
+            return new ModelAndView("/reg/resetPassword", Map.of("errorMessage", "Passwords do not match"));
+        }
+        return userService.getPasswordResetToken(token).map(passwordResetToken -> {
+            if (passwordResetToken.getUser() == null) {
+                redirectAttributes.addFlashAttribute("message", "Unknown user");
+            }
+            userService.changeUserPassword(passwordResetToken.getUser(), password);
+            redirectAttributes.addFlashAttribute("message", "Password reset successfully");
+            return new ModelAndView("redirect:/reg/login");
+        }).orElseGet(() -> {
+            redirectAttributes.addFlashAttribute("message", "Invalid token");
+            return new ModelAndView("redirect:/reg/login");
+        });
     }
 
     @GetMapping("favicon.ico")
