@@ -1,5 +1,7 @@
 package com.matiej.springsecstudy.user.controller.command;
 
+import com.matiej.springsecstudy.global.validators.MatchingPassword;
+import com.matiej.springsecstudy.global.validators.PasswordsValidator;
 import com.matiej.springsecstudy.user.domain.Role;
 import com.matiej.springsecstudy.user.domain.UserEntity;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,9 +18,10 @@ import java.util.stream.Collectors;
 @Setter
 @Getter
 @NoArgsConstructor
+@MatchingPassword
 public class RegisterUserCommand extends UserCommand {
 
-    @NotEmpty(message = "password is required.")
+    @PasswordsValidator(message = "Password is required")
     private String password;
     @NotEmpty(message = "matchingPassword is required.")
     private String matchingPassword;

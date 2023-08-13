@@ -30,6 +30,7 @@
         <apache.commons>3.12.0</apache.commons>
         <hibernate.validator>6.2.4.Final</hibernate.validator>
         <hibernate.core>6.2.6.Final</hibernate.core>
+        <passay.version>1.6.3</passay.version>
     </properties>
 
     <dependencies>
@@ -84,6 +85,12 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>${apache.commons}</version>
+        </dependency>
+        <dependency>
+<!--            library for passwords, to validate password on server site (backend)-->
+            <groupId>org.passay</groupId>
+            <artifactId>passay</artifactId>
+            <version>${passay.version}</version>
         </dependency>
 
         <dependency>
