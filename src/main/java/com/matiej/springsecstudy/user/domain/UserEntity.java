@@ -1,6 +1,7 @@
 package com.matiej.springsecstudy.user.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.matiej.springsecstudy.email.domain.EmailEntity;
 import com.matiej.springsecstudy.global.jpa.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -31,8 +32,14 @@ public class UserEntity extends BaseEntity {
             inverseJoinColumns = {@JoinColumn(name = "role_id")})
     private Set<Role> roles = new HashSet<>();
     private Boolean enabled;
-    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST,CascadeType.PERSIST, CascadeType.REMOVE})
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.MERGE,CascadeType.PERSIST, CascadeType.REMOVE})
     private Set<UserToken> tokens = new HashSet<>();
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.MERGE,CascadeType.PERSIST, CascadeType.REMOVE})
+    private Set<EmailEntity> emails = new HashSet<>();
 
     public UserEntity(String username, String password, String matchingPassword, String email) {
         this.username = username;
@@ -64,5 +71,8 @@ public class UserEntity extends BaseEntity {
 
     public void addToken(UserToken token) {
         this.tokens.add(token);
+    }
+    public void addEmail(EmailEntity email) {
+        this.emails.add(email);
     }
 }
