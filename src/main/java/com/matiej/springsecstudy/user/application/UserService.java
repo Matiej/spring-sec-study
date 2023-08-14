@@ -14,6 +14,7 @@ public interface UserService {
     List<UserEntity> findAll();
 
     UserQueryResponse save(CreateUserCommand user);
+    void save(UserEntity userEntity);
 
     void deleteUser(Long id);
 

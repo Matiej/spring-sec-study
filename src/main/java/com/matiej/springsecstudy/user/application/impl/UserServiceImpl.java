@@ -1,6 +1,6 @@
 package com.matiej.springsecstudy.user.application.impl;
 
-import com.matiej.springsecstudy.email.EmailType;
+import com.matiej.springsecstudy.email.domain.EmailType;
 import com.matiej.springsecstudy.email.application.EmailService;
 import com.matiej.springsecstudy.email.application.SendEmailCommand;
 import com.matiej.springsecstudy.user.application.UserQueryResponse;
@@ -46,6 +46,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void save(UserEntity userEntity) {
+        userRepository.save(userEntity);
+    }
+
+    @Override
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
@@ -70,7 +75,7 @@ public class UserServiceImpl implements UserService {
         UserEntity savedUser = userRepository.save(userEntity);
 
         final String urlToClick = generateVerifyLink(user.getRequest(), userToken.getToken());
-        emailService.sendEmail(new SendEmailCommand(EmailType.ACTIVATE, savedUser.getEmail(), urlToClick));
+        emailService.sendEmail(new SendEmailCommand(EmailType.ACTIVATE, savedUser.getEmail(), urlToClick, savedUser));
 
         return UserQueryResponse.convertToResponse(savedUser);
     }
@@ -126,7 +131,7 @@ public class UserServiceImpl implements UserService {
             userRepository.save(user);
             String ulrToClick = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() +
                     "/reg/changePassword?id=" + user.getId() + "&token=" + token;
-            emailService.sendEmail(new SendEmailCommand(EmailType.PASSWORD_RESET, user.getEmail(), ulrToClick));
+            emailService.sendEmail(new SendEmailCommand(EmailType.PASSWORD_RESET, user.getEmail(), ulrToClick, user));
         }, () -> {
             throw new IllegalArgumentException("User: " + emailService + " not found");
         });

@@ -19,7 +19,7 @@ public class UserToken extends BaseEntity {
     @JoinColumn(nullable = false, name = "user_id")
     private UserEntity user;
     private LocalDateTime expiryDate;
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private TokenType tokenType;
 
     public UserToken(String token, UserEntity user, LocalDateTime expiryDate, TokenType tokenType) {
