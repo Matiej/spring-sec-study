@@ -5,6 +5,8 @@ import com.matiej.springsecstudy.email.EmailFactory;
 import com.matiej.springsecstudy.email.SendingService;
 import com.matiej.springsecstudy.email.application.EmailService;
 import com.matiej.springsecstudy.email.application.SendEmailCommand;
+import com.matiej.springsecstudy.user.application.UserService;
+import com.matiej.springsecstudy.user.application.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
