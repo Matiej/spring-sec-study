@@ -7,13 +7,16 @@ import com.matiej.springsecstudy.email.domain.EmailType;
 import com.matiej.springsecstudy.user.application.UserService;
 import com.matiej.springsecstudy.user.database.UserRepository;
 import com.matiej.springsecstudy.user.domain.UserEntity;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -25,6 +28,8 @@ public class SendingService {
     private final Environment environment;
     private final EmailEntityRepository emailRepository;
     private final UserRepository userRepository;
+    @Value("${email.resending.attemptsLimit}")
+    private int attemptsLimit;
 
     public void sendAnEmail(SendingRequest request) {
         SimpleMailMessage simpleMailMessage = constructEmailMessage(request);
@@ -32,21 +37,41 @@ public class SendingService {
         EmailEntity emailEntity = EmailEntity.toEmailEntity(simpleMailMessage, request.getEmailType());
         UserEntity user = request.getUser();
         emailEntity.setUser(user);
-        emailEntity.incrementAttempt();
+        send(simpleMailMessage, emailEntity, user);
+    }
 
+    @Transactional
+    public void reSendEmail(ResendingRequest request) {
+        EmailEntity email = request.getEmail();
+        SimpleMailMessage simpleMailMessage = constructEmailMessage(new SendingRequest(email.getContent(),
+                email.getEmailTo(), email.getSubject()));
+        send(simpleMailMessage, email, email.getUser());
+
+    }
+
+    private void send(SimpleMailMessage simpleMailMessage,
+                      EmailEntity emailEntity, UserEntity user) {
+        String recipients = Arrays.toString(simpleMailMessage.getTo());
+        emailEntity.incrementAttempt();
         try {
             mailSender.send(simpleMailMessage);
-            log.info("Email has been sent successful to: " + Arrays.toString(simpleMailMessage.getTo()));
+            log.info("Email has been sent successful to: " + recipients);
             emailEntity.setStatus(EmailStatus.SENT);
-            emailRepository.save(emailEntity);
-            user.addEmail(emailEntity);
-            userRepository.save(user);
+            emailEntity.setSentDate(LocalDateTime.now());
+            saveAll(emailEntity, user);
         } catch (Exception e) {
-            emailEntity.setStatus(EmailStatus.ERROR);
-            emailRepository.save(emailEntity);
+            emailEntity.setStatus(emailEntity.getAttempts() >= attemptsLimit ? EmailStatus.ABANDONED: EmailStatus.ERROR);
+            emailEntity.setLastAttemptDate(LocalDateTime.now());
+            saveAll(emailEntity, user);
+            log.error("Failed send activation email to: " + recipients);
+        }
+    }
+
+    private void saveAll(EmailEntity emailEntity, UserEntity user) {
+        emailRepository.save(emailEntity);
+        if (emailEntity.getAttempts() <= 1) {
             user.addEmail(emailEntity);
             userRepository.save(user);
-            log.error("Failed send activation email to: " + request.getRecipient());
         }
     }
 
