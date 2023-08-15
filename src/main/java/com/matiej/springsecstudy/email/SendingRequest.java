@@ -13,6 +13,12 @@ class SendingRequest {
     private final String content;
     private final String recipient;
     private final String subject;
-    private final UserEntity user;
-    private final EmailType emailType;
+    private UserEntity user;
+    private EmailType emailType;
+
+    public SendingRequest(String content, String recipient, String subject) {
+        this.content = content;
+        this.recipient = recipient;
+        this.subject = subject;
+    }
 }

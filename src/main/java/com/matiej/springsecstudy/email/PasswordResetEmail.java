@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @RequiredArgsConstructor
 public class PasswordResetEmail implements Email{
-    private static final String CONTENT = "Please open the following URL to reset your password: \\r\\n\"  ";
+    private static final String CONTENT = "Please open the following URL to reset your password:   ";
     private static final String SUBJECT = "Reset your Password";
     private final String recipient;
     private final String activateUrl;
