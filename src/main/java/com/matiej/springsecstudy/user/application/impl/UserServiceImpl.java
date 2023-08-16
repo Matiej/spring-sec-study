@@ -74,8 +74,8 @@ public class UserServiceImpl implements UserService {
         userEntity.addToken(userToken);
         UserEntity savedUser = userRepository.save(userEntity);
 
-        final String urlToClick = generateVerifyLink(user.getRequest(), userToken.getToken());
-        emailService.sendEmail(new SendEmailCommand(EmailType.ACTIVATE, savedUser.getEmail(), urlToClick, savedUser));
+        final String urlToClick = generateVerifyLink(user.getRequest(), userToken.getTokenName());
+        emailService.sendEmail(new SendEmailCommand(EmailType.ACTIVATE, savedUser.getUserEmail(), urlToClick, savedUser));
 
         return UserQueryResponse.convertToResponse(savedUser);
     }
@@ -86,13 +86,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<UserEntity> findByName(String username) {
-        return userRepository.findByUsername(username);
+        return userRepository.findByName(username);
 
     }
 
     @Override
     public Optional<UserQueryResponse> findByEmail(String email) {
-        return userRepository.findByEmail(email)
+        return userRepository.findByUserEmail(email)
                 .map(UserQueryResponse::convertToResponse);
     }
 
@@ -100,8 +100,8 @@ public class UserServiceImpl implements UserService {
     public UserQueryResponse update(ModifyUserCommand user) {
         Optional<UserEntity> foundUser = userRepository.findById(user.getId());
         return foundUser.map(userEntity -> {
-            userEntity.setUsername(user.getUsername());
-            userEntity.setEmail(user.getEmail());
+            userEntity.setName(user.getUsername());
+            userEntity.setUserEmail(user.getEmail());
             UserEntity savedUser = userRepository.save(userEntity);
             return UserQueryResponse.convertToResponse(savedUser);
         }).orElseThrow(() -> new UsernameNotFoundException("Can't find user: " + user.getUsername()));
@@ -109,12 +109,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void confirmRegistration(String token) {
-        tokenRepository.findByToken(token)
+        tokenRepository.findByTokenName(token)
                 .ifPresentOrElse(tk -> {
                     UserEntity user = tk.getUser();
                     user.setEnabled(true);
                     userRepository.save(user);
-                    log.info("Activation success for user: " + user.getUsername());
+                    log.info("Activation success for user: " + user.getName());
                 }, () -> {
                     throw new IllegalArgumentException("Can't find given token, user not activated");
                 });
@@ -123,7 +123,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void resetPassword(String userEmail, HttpServletRequest request) {
-        userRepository.findByEmail(userEmail).ifPresentOrElse(user -> {
+        userRepository.findByUserEmail(userEmail).ifPresentOrElse(user -> {
             String token = UUID.randomUUID().toString();
             UserToken userToken = new UserToken(token, user, LocalDateTime.now().plusMinutes(30), TokenType.PASSWORD_RESET_TOKEN);
             tokenRepository.save(userToken);
@@ -131,7 +131,7 @@ public class UserServiceImpl implements UserService {
             userRepository.save(user);
             String ulrToClick = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() +
                     "/reg/changePassword?id=" + user.getId() + "&token=" + token;
-            emailService.sendEmail(new SendEmailCommand(EmailType.PASSWORD_RESET, user.getEmail(), ulrToClick, user));
+            emailService.sendEmail(new SendEmailCommand(EmailType.PASSWORD_RESET, user.getUserEmail(), ulrToClick, user));
         }, () -> {
             throw new IllegalArgumentException("User: " + emailService + " not found");
         });
@@ -139,7 +139,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<UserToken> getPasswordResetToken(String token) {
-        return tokenRepository.findByToken(token);
+        return tokenRepository.findByTokenName(token);
     }
 
     @Override
@@ -150,6 +150,6 @@ public class UserServiceImpl implements UserService {
     }
 
     private boolean isUserExist(String email) {
-        return userRepository.findByEmail(email).isPresent();
+        return userRepository.findByUserEmail(email).isPresent();
     }
 }

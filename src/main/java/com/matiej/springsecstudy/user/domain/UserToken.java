@@ -11,19 +11,20 @@ import java.util.Objects;
 
 @Getter
 @Setter
-@Entity
+@Entity(name = "token")
+@Table(name = "token")
 @NoArgsConstructor
 public class UserToken extends BaseEntity {
-    private String token;
+    private String tokenName;
     @ManyToOne()
-    @JoinColumn(nullable = false, name = "user_id")
+    @JoinColumn(name = "user_id")
     private UserEntity user;
     private LocalDateTime expiryDate;
     @Enumerated(EnumType.STRING)
     private TokenType tokenType;
 
-    public UserToken(String token, UserEntity user, LocalDateTime expiryDate, TokenType tokenType) {
-        this.token = token;
+    public UserToken(String tokenName, UserEntity user, LocalDateTime expiryDate, TokenType tokenType) {
+        this.tokenName = tokenName;
         this.user = user;
         this.expiryDate = expiryDate;
         this.tokenType = tokenType;
@@ -35,11 +36,11 @@ public class UserToken extends BaseEntity {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         UserToken that = (UserToken) o;
-        return Objects.equals(token, that.token) && Objects.equals(user, that.user) && Objects.equals(expiryDate, that.expiryDate);
+        return Objects.equals(tokenName, that.tokenName) && Objects.equals(user, that.user) && Objects.equals(expiryDate, that.expiryDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), token, user, expiryDate);
+        return Objects.hash(super.hashCode(), tokenName, user, expiryDate);
     }
 }
