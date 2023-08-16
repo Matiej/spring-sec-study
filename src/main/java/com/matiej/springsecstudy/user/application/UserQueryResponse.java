@@ -24,10 +24,10 @@ public class UserQueryResponse {
     public static UserQueryResponse convertToResponse(UserEntity userEntity) {
         return UserQueryResponse.builder()
                 .id(userEntity.getId())
-                .username(userEntity.getUsername())
+                .username(userEntity.getName())
                 .createdAt(userEntity.getCreatedAt())
                 .roles(userEntity.getRoles().stream().map(Role::getRoleName).toList())
-                .email(userEntity.getEmail())
+                .email(userEntity.getUserEmail())
                 .build();
     }
 

@@ -33,7 +33,7 @@ public class UserEntityDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return this.userEntity.getUsername();
+        return this.userEntity.getName();
     }
 
     @Override

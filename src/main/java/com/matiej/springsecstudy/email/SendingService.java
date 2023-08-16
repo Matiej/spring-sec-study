@@ -46,7 +46,6 @@ public class SendingService {
         SimpleMailMessage simpleMailMessage = constructEmailMessage(new SendingRequest(email.getContent(),
                 email.getEmailTo(), email.getSubject()));
         send(simpleMailMessage, email, email.getUser());
-
     }
 
     private void send(SimpleMailMessage simpleMailMessage,

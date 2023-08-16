@@ -5,7 +5,6 @@ import com.matiej.springsecstudy.email.domain.EmailEntity;
 import com.matiej.springsecstudy.global.jpa.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
-import org.apache.catalina.User;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -17,13 +16,13 @@ import java.util.Set;
 @Table(name = "users")
 @NoArgsConstructor
 public class UserEntity extends BaseEntity {
-    @Column(unique = true)
-    private String username;
+    private String name;
     @JsonIgnore // in order to not display the password anywhere
     private String password;
     @JsonIgnore
     private String matchingPassword;
-    private String email;
+    @Column(name = "user_email")
+    private String userEmail;
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
@@ -41,11 +40,11 @@ public class UserEntity extends BaseEntity {
     @OneToMany(mappedBy = "user", cascade = {CascadeType.MERGE,CascadeType.PERSIST, CascadeType.REMOVE})
     private Set<EmailEntity> emails = new HashSet<>();
 
-    public UserEntity(String username, String password, String matchingPassword, String email) {
-        this.username = username;
+    public UserEntity(String name, String password, String matchingPassword, String userEmail) {
+        this.name = name;
         this.password = password;
         this.matchingPassword = matchingPassword;
-        this.email = email;
+        this.userEmail = userEmail;
     }
 
     @Override
@@ -53,12 +52,12 @@ public class UserEntity extends BaseEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserEntity that = (UserEntity) o;
-        return Objects.equals(username, that.username) && Objects.equals(password, that.password) && Objects.equals(matchingPassword, that.matchingPassword);
+        return Objects.equals(name, that.name) && Objects.equals(password, that.password) && Objects.equals(matchingPassword, that.matchingPassword);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(username, password, matchingPassword);
+        return Objects.hash(name, password, matchingPassword);
     }
 
     public void addRole(Role role) {
