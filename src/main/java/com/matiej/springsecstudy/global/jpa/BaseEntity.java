@@ -20,8 +20,9 @@ import static java.util.UUID.randomUUID;
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseEntity {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(unique = true)
     private String UUID = randomUUID().toString();
     @CreatedDate
     private LocalDateTime createdAt;

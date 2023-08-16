@@ -2,6 +2,7 @@ package com.matiej.springsecstudy.security;
 
 import com.matiej.springsecstudy.user.application.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +16,10 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+
+import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
@@ -23,6 +28,13 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecConfig {
     private final UserService userService;
     private final DefaultAdmin defaultAdmin;
+    private final DataSource dataSource;
+    @Value("${app.security.cookie-token.validity.seconds}")
+    private int cookieTokenValidity;
+    @Value("${app.security.cookie-key}")
+    private String cookieKey;
+    @Value("${app.security.cookie-name}")
+    private String cookieName;
     private static final String[] PERMIT_ALL = {
             "/styles/**",
             "/h2-console/**",
@@ -68,10 +80,37 @@ public class SecConfig {
                         .requestMatchers(PERMIT_ALL).permitAll()
                         .requestMatchers("/delete/**").hasAuthority("ADMIN")
                         .anyRequest().authenticated())
-                .formLogin().loginPage("/reg/login").permitAll().loginProcessingUrl("/do-logging")
+
+                .formLogin()
+                .loginPage("/reg/login")
+                .permitAll()
+                .loginProcessingUrl("/do-logging")
+
                 .and()
-                .logout().permitAll().logoutUrl("/logout").logoutSuccessUrl("/");
+                .rememberMe()
+                // all below for cookie storing persistance
+//                .tokenValiditySeconds(cookieTokenValidity)
+//                .key(cookieKey)
+//                .rememberMeCookieName(cookieName)
+//                .rememberMeParameter(cookieName)
+//                .useSecureCookie(true) doesn't work if no https. If true then cookie doesn't work and doenst keep login
+                //data base storing
+                .tokenRepository(persistentTokenRepository())
+
+                .and()
+                .logout()
+                .permitAll()
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/");
+
         return http.build();
+    }
+
+    @Bean
+    public PersistentTokenRepository persistentTokenRepository() {
+        JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
+        jdbcTokenRepository.setDataSource(dataSource);
+        return jdbcTokenRepository;
     }
 
 }
