@@ -20,7 +20,7 @@ public interface UserService {
 
     Optional<UserQueryResponse> findById(Long id);
 
-    UserQueryResponse registerNewUser(RegisterUserCommand user);
+    UserQueryResponse registerNewUser(RegisterUserCommand user, HttpServletRequest request);
 
     Optional<UserEntity> findByName(String username);
     Optional<UserQueryResponse> findByEmail(String email);

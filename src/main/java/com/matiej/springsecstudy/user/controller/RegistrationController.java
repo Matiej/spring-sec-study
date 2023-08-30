@@ -16,8 +16,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
-import java.util.Map;
-import java.util.UUID;
 
 @Controller
 @RequestMapping(value = "/reg")
@@ -37,8 +35,7 @@ public class RegistrationController {
             return new ModelAndView("registrationPage", "user", user);
         }
         try {
-            user.setRequest(request);
-            UserQueryResponse userQueryResponse = userService.registerNewUser(user);
+            UserQueryResponse userQueryResponse = userService.registerNewUser(user, request);
         } catch (IllegalArgumentException e) {
             result.addError(new FieldError("user", "email", e.getMessage()));
             return new ModelAndView("registrationPage", "user", user);

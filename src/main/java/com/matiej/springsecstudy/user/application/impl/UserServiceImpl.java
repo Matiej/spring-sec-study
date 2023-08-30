@@ -8,6 +8,7 @@ import com.matiej.springsecstudy.user.application.UserService;
 import com.matiej.springsecstudy.user.controller.command.CreateUserCommand;
 import com.matiej.springsecstudy.user.controller.command.ModifyUserCommand;
 import com.matiej.springsecstudy.user.controller.command.RegisterUserCommand;
+import com.matiej.springsecstudy.user.database.RolesRepository;
 import com.matiej.springsecstudy.user.database.UserRepository;
 import com.matiej.springsecstudy.user.database.VerificationTokenRepository;
 import com.matiej.springsecstudy.user.domain.*;
@@ -32,6 +33,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final VerificationTokenRepository tokenRepository;
     private final EmailService emailService;
+    private final RolesRepository rolesRepository;
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Override
@@ -63,21 +65,30 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserQueryResponse registerNewUser(RegisterUserCommand user) {
-        if (isUserExist(user.getEmail())) {
-            throw new IllegalArgumentException("There is an account with email: " + user.getEmail());
+    public UserQueryResponse registerNewUser(RegisterUserCommand registerUserCommand, HttpServletRequest request) {
+        if (isUserExist(registerUserCommand.getEmail())) {
+            throw new IllegalArgumentException("There is an account with email: " + registerUserCommand.getEmail());
         }
-        UserEntity userEntity = user.convertToUserEntity(passwordEncoder, false, new Role(RoleType.USER));
+
+
+        UserEntity userEntity = registerUserCommand.convertToUserEntity(passwordEncoder, false, findRole(RoleType.USER));
 
         String randomToken = UUID.randomUUID().toString();
         UserToken userToken = new UserToken(randomToken, userEntity, LocalDateTime.now().plusYears(2), TokenType.ACTIVATION);
         userEntity.addToken(userToken);
         UserEntity savedUser = userRepository.save(userEntity);
 
-        final String urlToClick = generateVerifyLink(user.getRequest(), userToken.getTokenName());
+        final String urlToClick = generateVerifyLink(request, userToken.getTokenName());
         emailService.sendEmail(new SendEmailCommand(EmailType.ACTIVATE, savedUser.getUserEmail(), urlToClick, savedUser));
 
         return UserQueryResponse.convertToResponse(savedUser);
+    }
+
+    private Role findRole(RoleType roleType) {
+        return rolesRepository.findAll().stream()
+                .filter(p -> p.getRoleName().equals(roleType.name()))
+                .findAny()
+                .orElseGet(() -> new Role(roleType));
     }
 
     private String generateVerifyLink(HttpServletRequest request, String token) {
