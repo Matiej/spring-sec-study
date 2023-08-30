@@ -23,9 +23,8 @@ public class RegisterUserCommand extends UserCommand {
 
     @PasswordsValidator(message = "Password is required")
     private String password;
-    @NotEmpty(message = "matchingPassword is required.")
+//    @NotEmpty(message = "matchingPassword is required.")
     private String matchingPassword;
-    private HttpServletRequest request;
 
     @Override
     public UserEntity convertToUserEntity(PasswordEncoder passwordEncoder, boolean isEnabled) {
