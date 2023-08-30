@@ -20,8 +20,13 @@
             </ul>
             <ul class="nav pull-right">
                 <li>
-                    <a style="color: #62DBF6">User logged:
-                        <span sec:authentication="name">No user logged</span>
+                    <a style="color: #62DBF6" >User logged:
+                        <span sec:authentication="principal.username">No user logged</span>
+                    </a>
+                </li>
+                <li>
+                    <a style="color: green ">Roles:
+                        <span sec:authentication="principal.authorities">roles</span>
                     </a>
                 </li>
             </ul>

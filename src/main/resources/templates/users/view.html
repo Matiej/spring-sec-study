@@ -1,5 +1,6 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
       layout:decorator="layout">
 <head>
     <title>Users : View</title>
@@ -28,6 +29,8 @@
             </dd>
             <dt>-Email:</dt>
             <dd id="email" th:text="${user.email}">Email</dd>
+            <dt>-User roles:</dt>
+            <dd id="roles" sec:authentication="principal.authorities">Roles</dd>
         </dl>
         <div class="button-container">
             <a type="button" class="btn btn-danger"

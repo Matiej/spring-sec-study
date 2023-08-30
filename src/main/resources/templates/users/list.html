@@ -1,10 +1,14 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
-      layout:decorator="~{layout.html}">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorator="~{layout.html}"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <title>Users : View all</title>
     <!--  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" href="../../static/css/bootstrap.min.css" />-->
-    <link type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css">
+
+    <!--    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" href="../../../resources/static/css/bootstrap.min.css"/>-->
     <link rel="icon" href="../../favicon.ico" type="image/x-icon">
     <link th:href="@{/styles/main.css}" rel="stylesheet"/>
 </head>
@@ -32,6 +36,18 @@
         </tr>
         </tbody>
     </table>
+    <div class="container" style="text-align: center"  sec:authorize="hasAuthority('ADMIN')">
+        <div class="row">
+            <h1>THIS IS SPECIAL DATA FOR ADMIN</h1>
+            <h4>Choice your destiny!</h4>
+            <div class="col-md-6">
+                <button type="button" class="btn btn-primary">BLUE PILL</button>
+            </div>
+            <div class="col-md-6">
+                <button type="button" class="btn btn-warning">RED PILL</button>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 </html>
