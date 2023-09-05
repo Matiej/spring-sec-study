@@ -2,8 +2,6 @@ package com.matiej.springsecstudy.global.validators;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 
 import java.lang.annotation.*;
 

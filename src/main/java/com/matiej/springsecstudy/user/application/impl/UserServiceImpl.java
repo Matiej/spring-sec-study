@@ -1,8 +1,8 @@
 package com.matiej.springsecstudy.user.application.impl;
 
-import com.matiej.springsecstudy.email.domain.EmailType;
 import com.matiej.springsecstudy.email.application.EmailService;
 import com.matiej.springsecstudy.email.application.SendEmailCommand;
+import com.matiej.springsecstudy.email.domain.EmailType;
 import com.matiej.springsecstudy.user.application.UserQueryResponse;
 import com.matiej.springsecstudy.user.application.UserService;
 import com.matiej.springsecstudy.user.controller.command.CreateUserCommand;
