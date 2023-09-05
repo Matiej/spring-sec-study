@@ -12,12 +12,18 @@ import org.springframework.stereotype.Service;
 public class UserEntityDetailService implements UserDetailsService {
     private final UserService userService;
     private final DefaultAdmin defaultAdmin;
+    private final TestUser testUser;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        if (defaultAdmin.getUsername().equalsIgnoreCase(username)) {
+        //todo delete test user or ADMIN!!!
+        if (defaultAdmin.getUsername().equalsIgnoreCase(username) ) {
             return defaultAdmin.adminToUser();
         }
+        if(username.equals(testUser.getUsername())) {
+            return testUser.testUserToUser();
+        }
+
         return userService.findByName(username)
                 .map(UserEntityDetails::new)
                 .orElseThrow(() -> new UsernameNotFoundException("Cannot find user: " + username));
