@@ -15,7 +15,7 @@
             <ul class="nav">
                 <li><a th:href="@{/}" href="users/list.html"> Users </a></li>
             </ul>
-            <ul class="nav">
+            <ul class="nav" sec:authorize="hasRole('ADMIN')">
                 <li><a th:href="@{/secured}"> Secured </a></li>
             </ul>
             <ul class="nav pull-right">

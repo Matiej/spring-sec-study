@@ -38,13 +38,25 @@
     </table>
     <div class="container" style="text-align: center"  sec:authorize="hasAuthority('ADMIN')">
         <div class="row">
-            <h1>THIS IS SPECIAL DATA FOR ADMIN</h1>
+            <h1 style="color: red">THIS IS SPECIAL DATA FOR ADMIN AND ROLE_ADMIN AS WELL</h1>
             <h4>Choice your destiny!</h4>
             <div class="col-md-6">
                 <button type="button" class="btn btn-primary">BLUE PILL</button>
             </div>
             <div class="col-md-6">
-                <button type="button" class="btn btn-warning">RED PILL</button>
+                <button type="button" class="btn btn-warning">ORANGE PILL</button>
+            </div>
+        </div>
+    </div>
+    <div class="container" style="text-align: center"  sec:authorize="hasRole('ADMIN')">
+        <div class="row">
+            <h1>THIS IS SPECIAL DATA FOR ROLE_ADMINS</h1>
+            <h4>Choice your destiny!</h4>
+            <div class="col-md-6">
+                <button type="button" class="btn btn-primary">BLUE PILL ROLE_</button>
+            </div>
+            <div class="col-md-6">
+                <button type="button" class="btn btn-danger">RED PILL ROLE_</button>
             </div>
         </div>
     </div>
