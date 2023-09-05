@@ -3,8 +3,6 @@ package com.matiej.springsecstudy.email;
 import com.matiej.springsecstudy.email.database.EmailEntityRepository;
 import com.matiej.springsecstudy.email.domain.EmailEntity;
 import com.matiej.springsecstudy.email.domain.EmailStatus;
-import com.matiej.springsecstudy.email.domain.EmailType;
-import com.matiej.springsecstudy.user.application.UserService;
 import com.matiej.springsecstudy.user.database.UserRepository;
 import com.matiej.springsecstudy.user.domain.UserEntity;
 import jakarta.transaction.Transactional;

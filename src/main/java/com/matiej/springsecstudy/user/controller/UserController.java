@@ -4,8 +4,6 @@ import com.matiej.springsecstudy.user.application.UserQueryResponse;
 import com.matiej.springsecstudy.user.application.UserService;
 import com.matiej.springsecstudy.user.controller.command.CreateUserCommand;
 import com.matiej.springsecstudy.user.controller.command.ModifyUserCommand;
-import com.matiej.springsecstudy.user.domain.UserToken;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

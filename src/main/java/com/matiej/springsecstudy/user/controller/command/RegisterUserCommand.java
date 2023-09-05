@@ -4,8 +4,6 @@ import com.matiej.springsecstudy.global.validators.MatchingPassword;
 import com.matiej.springsecstudy.global.validators.PasswordsValidator;
 import com.matiej.springsecstudy.user.domain.Role;
 import com.matiej.springsecstudy.user.domain.UserEntity;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
