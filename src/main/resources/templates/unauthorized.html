@@ -10,8 +10,15 @@
     <link rel="icon" href="../../favicon.ico" type="image/x-icon">
     <link th:href="@{/styles/main.css}" rel="stylesheet"/>
 </head>
+
 <body>
 <h1 layout:fragment="header">UNAUTHORIZED ERROR PAGE</h1>
+<p>You don't have permission to access this page.</p>
+
+<!-- Display errors from the model -->
+<ul th:if="${not #lists.isEmpty(formErrors)}">
+    <li th:each="error : ${formErrors}" th:text="${error}"></li>
+</ul>
 <div layout:fragment="content" class="container">
     <div th:if="${param.error}" th:text="${session.SPRING_SECURITY_LAST_EXCEPTION.message}"
          class="alert alert-danger">Login Error

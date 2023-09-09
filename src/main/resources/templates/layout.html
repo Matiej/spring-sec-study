@@ -16,14 +16,17 @@
                 <li><a th:href="@{/}" href="users/list.html"> Users </a></li>
             </ul>
             <ul class="nav" sec:authorize="hasRole('ADMIN')">
-                <li><a th:href="@{/secured}"> Secured </a></li>
+                <li><a th:href="@{/admin/secured}"> Secured Page </a></li>
+            </ul>
+            <ul class="nav" sec:authorize="hasRole('ADMIN')">
+                <li><a th:href="@{/admin/securedIP}"> IP Secured </a></li>
             </ul>
             <ul class="nav pull-right">
                 <li><a th:href="@{/logout}" class="menu-right"> Logout </a></li>
             </ul>
             <ul class="nav pull-right">
                 <li>
-                    <a style="color: #62DBF6" >User logged:
+                    <a style="color: #62DBF6">User logged:
                         <span sec:authentication="principal.username">No user logged</span>
                     </a>
                 </li>

@@ -2,7 +2,8 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
-      layout:decorator="~{layout.html}">
+      layout:decorator="~{layout.html}"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <title>A Secured Page</title>
     <link rel="stylesheet" type="text/css"
@@ -12,6 +13,12 @@
 </head>
 <body>
 <h1 layout:fragment="header">An empty secured page</h1>
-<div layout:fragment="content" class="container"></div>
+<div layout:fragment="content" class="container">
+    <dt>-Username:</dt>
+    <dd id="username" th:text="${user.username}">Username
+    </dd>
+    <dt>-User roles:</dt>
+    <dd id="roles" sec:authentication="principal.authorities">Roles</dd>
+</div>
 </body>
 </html>
