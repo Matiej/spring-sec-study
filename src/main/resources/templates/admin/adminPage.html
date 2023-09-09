@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorator="~{layout.html}"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+  <title>A Secured Page</title>
+  <link rel="stylesheet" type="text/css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css">
+  <link rel="icon" href="../../favicon.ico" type="image/x-icon">
+  <link th:href="@{/styles/main.css}" rel="stylesheet"/>
+</head>
+<body>
+<h1 layout:fragment="header">ADMIN PAGE</h1>
+<div layout:fragment="content" class="container">
+  <dt>-Username:</dt>
+  <dd id="username" th:text="${user.username}">Username
+  </dd>
+  <dt>-User roles:</dt>
+  <dd id="roles" sec:authentication="principal.authorities">Roles</dd>
+  <dt>-All Data Principal:</dt>
+  <dd id="pri" th:text="${#authentication.principal}"></dd>
+
+  <hr>
+  <br>
+  <img th:src="@{/assets/adminmoto.jpg}" alt="ip_picture" style="isplay: block;
+        margin-left: auto;
+        margin-right: auto;
+        border: 1px solid black;">
+
+</div>
+</body>
+</html>
