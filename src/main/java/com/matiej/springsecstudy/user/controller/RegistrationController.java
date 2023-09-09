@@ -100,4 +100,10 @@ public class RegistrationController {
         return "loginPage";
     }
 
+    @GetMapping("/logout")
+    public String logout(@ModelAttribute("message") String message, Model model) {
+        model.addAttribute("message", message);
+        return "logoutPage";
+    }
+
 }
