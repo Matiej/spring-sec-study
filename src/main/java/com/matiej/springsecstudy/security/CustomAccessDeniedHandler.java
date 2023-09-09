@@ -36,13 +36,11 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
             String principalRoles = getPrincipalRoles(userPrincipal);
             String roles = Strings.isNotEmpty(principalRoles) ? principalRoles : "[no ROLES found]";
             errorMessage = "User: " + remoteUser + " with ROLES: " + roles + " doesn't have permission to access this page!";
-        } else if (requestURI.contains("/securedIP")) {
+        } else if (requestURI.contains("/IPSecured")) {
             errorMessage = "User: " + remoteUser + " with IP: " + request.getRemoteAddr() + " doesn't have permission to access this page!";
         }
-
         request.getSession().setAttribute("errorMessage", errorMessage);
         response.sendRedirect(request.getContextPath() + "/unauthorized");
-
     }
 
     private String getPrincipalRoles(Principal principal) {
