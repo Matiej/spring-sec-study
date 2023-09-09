@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorator="~{layout.html}">
+<head>
+    <title>A page only for special IPs</title>
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="icon" href="../../favicon.ico" type="image/x-icon">
+    <link th:href="@{/styles/main.css}" rel="stylesheet"/>
+</head>
+<body>
+<h1 layout:fragment="header">An empty IP SECURED PAGE</h1>
+<div layout:fragment="content" class="container">
+    <hr>
+    <h2>Host data:</h2>
+    <dt>-IP address:</dt>
+    <dd id="hostaddress" th:text="${dataMap[hostAddress]}">Username
+    </dd>
+    <dt>-Host name:</dt>
+    <dd id="hostname" th:text="${dataMap[hostName]}">Roles</dd>
+    <h2>Server data:</h2>
+    <dt>-IP address:</dt>
+    <dd id="serveripaddress" th:text="${dataMap[serverIPAddress]}">Username
+    </dd>
+    <dt>-Server name:</dt>
+    <dd id="servername" th:text="${dataMap[servername]}">Roles</dd>
+    <hr>
+    <br>
+    <img th:src="@{/assets/ip.jpg}" alt="ip_picture" style="isplay: block;
+        margin-left: auto;
+        margin-right: auto;
+        border: 1px solid black;">
+</div>
+</body>
+</html>

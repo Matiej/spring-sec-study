@@ -15,15 +15,21 @@
             <ul class="nav">
                 <li><a th:href="@{/}" href="users/list.html"> Users </a></li>
             </ul>
-            <ul class="nav" sec:authorize="hasRole('ADMIN')">
-                <li><a th:href="@{/secured}"> Secured </a></li>
+            <ul class="nav" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
+                <li><a th:href="@{/admin/admin-settings}"> Admin Settings </a></li>
+            </ul>
+            <ul class="nav" sec:authorize="hasAnyAuthority('ROLE_ADMIN', 'ROLE_SECURED')">
+                <li><a th:href="@{/admin/secured}"> Secured Page </a></li>
+            </ul>
+            <ul class="nav">
+                <li><a th:href="@{/admin/IPSecured}"> IP Secured </a></li>
             </ul>
             <ul class="nav pull-right">
-                <li><a th:href="@{/logout}" class="menu-right"> Logout </a></li>
+                <li><a th:href="@{/reg/logout}" class="menu-right"> Logout </a></li>
             </ul>
             <ul class="nav pull-right">
                 <li>
-                    <a style="color: #62DBF6" >User logged:
+                    <a style="color: #62DBF6">User logged:
                         <span sec:authentication="principal.username">No user logged</span>
                     </a>
                 </li>
@@ -36,9 +42,9 @@
         </div>
     </div>
     <section layout:fragment="header">
-        <h1>Layout</h1>
+        <h1>WELCOME TO MY PAGE</h1>
     </section>
-    <div layout:fragment="content">Fake content</div>
+    <div layout:fragment="content">WELCOME TO MY PAGE</div>
 </div>
 </body>
 </html>

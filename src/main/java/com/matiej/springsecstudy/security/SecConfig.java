@@ -1,6 +1,7 @@
 package com.matiej.springsecstudy.security;
 
 import com.matiej.springsecstudy.user.application.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -9,20 +10,30 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.authorization.AuthorizationDecision;
+import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.security.web.util.matcher.IpAddressMatcher;
 
 import javax.sql.DataSource;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Configuration
 @EnableWebSecurity
+//todo @EnableGlobalMethodSecurity(prePostEnabled = true) instead @EnableMethodSecurity
+@EnableMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
 @EnableConfigurationProperties({DefaultAdmin.class, TestUser.class})
 public class SecConfig {
@@ -30,6 +41,8 @@ public class SecConfig {
     private final DefaultAdmin defaultAdmin;
     private final TestUser testUser;
     private final DataSource dataSource;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
+
     @Value("${app.security.cookie-token.validity.seconds}")
     private int cookieTokenValidity;
     @Value("${app.security.cookie-key}")
@@ -41,6 +54,7 @@ public class SecConfig {
             "/h2-console/**",
             "/h2-console*",
             "/reg/login", "/reg/login/**", "/reg/login*",
+            "/reg/logout", "/reg/logout/**", "/reg/logout*",
             "/reg/signup",
             "/reg/signup*",
             "/reg/signup/**",
@@ -89,8 +103,13 @@ public class SecConfig {
 
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(PERMIT_ALL).permitAll()
-                        .requestMatchers("/delete/**").hasAuthority("ADMIN") //todo here can access only ADMIN + ROLE_ADMIN
-                        .requestMatchers("/secured*", "/secured/**", "/secured").hasRole("ADMIN")//todo secured will access user that has ROLE_ADMIN  in DB
+
+//                        .requestMatchers("/delete/**").hasAuthority("ADMIN") //todo here can access only ADMIN + ROLE_ADMIN
+//                        .requestMatchers("/secured*", "/secured/**", "/secured").hasRole("ADMIN")//todo secured will access user that has ROLE_ADMIN  in DB
+
+                        .requestMatchers("/user/delete/**").hasRole("ADMIN") // todo  will access user that has ROLE_ADMIN  in DB
+                        .requestMatchers("/admin/secured*", "/admin/secured**", "/admin/secured").hasAnyAuthority("ROLE_ADMIN", "ROLE_SECURED")//todo here can access only SECURED + ROLE_SECURED in db
+                        .requestMatchers("/admin/IPSecured*", "/admin/IPSecured**", "/admin/IPSecured").access(hasAnyIpAddress("127.0.0.1", "0:0:0:0:0:0:0:1"))
                         .anyRequest().authenticated())
                 .formLogin()
                 .loginPage("/reg/login").permitAll()
@@ -107,11 +126,9 @@ public class SecConfig {
                 //data base storing
                 .tokenRepository(persistentTokenRepository())
 
-                .and()
-                .logout()
-                .permitAll()
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/");
+                .and().logout().permitAll().logoutUrl("/reg/logout").logoutSuccessUrl("/")
+
+                .and().exceptionHandling().accessDeniedHandler(customAccessDeniedHandler);
 
         return http.build();
     }
@@ -121,5 +138,13 @@ public class SecConfig {
         JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
         jdbcTokenRepository.setDataSource(dataSource);
         return jdbcTokenRepository;
+    }
+
+    private static AuthorizationManager<RequestAuthorizationContext> hasAnyIpAddress(String ... ipAddress) {
+        List<IpAddressMatcher> ipAddressList = Arrays.stream(ipAddress).map(IpAddressMatcher::new).toList();
+        return (authentication, context) -> {
+            HttpServletRequest request = context.getRequest();
+            return new AuthorizationDecision(ipAddressList.stream().anyMatch(ipAddressMatcher -> ipAddressMatcher.matches(request)));
+        };
     }
 }
