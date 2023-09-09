@@ -13,7 +13,6 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -27,6 +26,9 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
 import org.springframework.security.web.util.matcher.IpAddressMatcher;
 
 import javax.sql.DataSource;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Configuration
 @EnableWebSecurity
@@ -87,8 +89,6 @@ public class SecConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//        IpAddressMatcher hasIpAddress = new IpAddressMatcher("127.0.0.1");
-        IpAddressMatcher hasIpAddress = new IpAddressMatcher("192.168.2.1");
         http.headers().frameOptions().sameOrigin(); //important for h2 console
         http.anonymous().disable()
                 .csrf(AbstractHttpConfigurer::disable)// impornat for h2 database console
@@ -109,8 +109,7 @@ public class SecConfig {
 
                         .requestMatchers("/user/delete/**").hasRole("ADMIN") // todo  will access user that has ROLE_ADMIN  in DB
                         .requestMatchers("/admin/secured*", "/admin/secured**", "/admin/secured").hasAnyAuthority("ROLE_ADMIN", "ROLE_SECURED")//todo here can access only SECURED + ROLE_SECURED in db
-                        .requestMatchers("/admin/IPSecured*", "/admin/IPSecured**", "/admin/IPSecured").access((authentication, context) ->
-                                new AuthorizationDecision(hasIpAddress.matches(context.getRequest())))
+                        .requestMatchers("/admin/IPSecured*", "/admin/IPSecured**", "/admin/IPSecured").access(hasAnyIpAddress("127.0.0.1", "0:0:0:0:0:0:0:1"))
                         .anyRequest().authenticated())
                 .formLogin()
                 .loginPage("/reg/login").permitAll()
@@ -139,5 +138,13 @@ public class SecConfig {
         JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
         jdbcTokenRepository.setDataSource(dataSource);
         return jdbcTokenRepository;
+    }
+
+    private static AuthorizationManager<RequestAuthorizationContext> hasAnyIpAddress(String ... ipAddress) {
+        List<IpAddressMatcher> ipAddressList = Arrays.stream(ipAddress).map(IpAddressMatcher::new).toList();
+        return (authentication, context) -> {
+            HttpServletRequest request = context.getRequest();
+            return new AuthorizationDecision(ipAddressList.stream().anyMatch(ipAddressMatcher -> ipAddressMatcher.matches(request)));
+        };
     }
 }
