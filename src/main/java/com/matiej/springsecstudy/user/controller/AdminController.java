@@ -1,7 +1,9 @@
 package com.matiej.springsecstudy.user.controller;
 
 import com.matiej.springsecstudy.user.application.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -20,12 +22,20 @@ public class AdminController {
     private final UserService userService;
 
     @RequestMapping("/secured")
-    public ModelAndView getSecuredPage(Authentication authentication) {
+    public ModelAndView getSecuredPage(Authentication authentication, HttpServletRequest request) {
+
         UserDetails user = (UserDetails) authentication.getPrincipal();
         return new ModelAndView("admin/securedPage", "user", user);
     }
 
-    @RequestMapping("/securedIP")
+    @RequestMapping("/admin-settings")
+    @PreAuthorize("hasRole('ADMIN') and principal.username=='admin'")
+    public ModelAndView getAdminPage(Authentication authentication, HttpServletRequest request) {
+        UserDetails user = (UserDetails) authentication.getPrincipal();
+        return new ModelAndView("admin/adminPage", "user", user);
+    }
+
+    @RequestMapping("/IPSecured")
     public ModelAndView getIPSecuredPage() {
         return new ModelAndView("admin/addressIPSecured", "dataMap", getHostAndIP());
     }
