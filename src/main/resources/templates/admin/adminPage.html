@@ -5,30 +5,28 @@
       layout:decorator="~{layout.html}"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
-  <title>A Secured Page</title>
-  <link rel="stylesheet" type="text/css"
-        href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css">
-  <link rel="icon" href="../../favicon.ico" type="image/x-icon">
-  <link th:href="@{/styles/main.css}" rel="stylesheet"/>
+    <title>A Secured Page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="icon" href="../../favicon.ico" type="image/x-icon">
+    <link th:href="@{/styles/main.css}" rel="stylesheet"/>
 </head>
 <body>
 <h1 layout:fragment="header">ADMIN PAGE</h1>
 <div layout:fragment="content" class="container">
-  <dt>-Username:</dt>
-  <dd id="username" th:text="${user.username}">Username
-  </dd>
-  <dt>-User roles:</dt>
-  <dd id="roles" sec:authentication="principal.authorities">Roles</dd>
-  <dt>-All Data Principal:</dt>
-  <dd id="pri" th:text="${#authentication.principal}"></dd>
+    <dt>-Username:</dt>
+    <dd id="username" th:text="${user.username}">Username
+    </dd>
+    <dt>-User roles:</dt>
+    <dd id="roles" sec:authentication="principal.authorities">Roles</dd>
+    <dt>-All Data Principal:</dt>
+    <dd id="pri" th:text="${#authentication.principal}"></dd>
 
-  <hr>
-  <br>
-  <img th:src="@{/assets/adminmoto.jpg}" alt="ip_picture" style="isplay: block;
-        margin-left: auto;
-        margin-right: auto;
-        border: 1px solid black;">
-
+    <hr>
+    <br>
+    <div class="row">
+        <img th:src="@{/assets/adminmoto.jpg}" alt="ip_picture" class="img-fluid"
+             style="display: block; margin: 0 auto; border: 1px solid black;">
+    </div>
 </div>
 </body>
 </html>
