@@ -50,7 +50,10 @@ public class SecConfig {
     @Value("${app.security.cookie-name}")
     private String cookieName;
     private static final String[] PERMIT_ALL = {
-            "/styles/**",
+            "/static/styles/", "/static/styles/**, /static/styles*",
+            "/static/**", "/static*", "/static",
+            "/styles/**", "/styles*", "/styles",
+            "/assets/**", "/assets*", "/assets",
             "/h2-console/**",
             "/h2-console*",
             "/reg/login", "/reg/login/**", "/reg/login*",
@@ -65,7 +68,9 @@ public class SecConfig {
             "/reg/registerConfirm/**", "/reg/registerConfirm*",
             "/reg/changePassword/**", "/reg/changePassword*",
             "/user/savePassword/**", "/user/savePassword*",
-            "/js/**", "/js*"
+            "/js/**", "/js*",
+            "/cert/", "/cert*", "/cert/**",
+            "/home/", "/home*", "/home/**"
     };
 
     @Bean

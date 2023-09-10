@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorator="~{layout.html}"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <title>A Secured Page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="icon" href="../../favicon.ico" type="image/x-icon">
+    <link th:href="@{/styles/main.css}" rel="stylesheet"/>
+</head>
+<body>
+<h1 layout:fragment="header" class="login-title"
+>Welcome to spring security app logging</h1>
+<div layout:fragment="content" class="container home-container">
+
+    <hr />
+    <div class="row image-row">
+        <div class="col-md-6 image-container">
+            <img th:src="@{/assets/im1.jpg}" alt="Image1" class="img-responsive" />
+            <h4>BMW R1200RT 2014-2019</h4>
+        </div>
+        <div class="col-md-6 image-container">
+            <img th:src="@{/assets/im2.jpg}" alt="Image2" class="img-responsive" />
+            <h4>BMW R1200RT 2010-2013</h4>
+        </div>
+    </div>
+    <div class="row image-row">
+        <div class="col-md-6 image-container">
+            <img th:src="@{/assets/im3.jpg}" alt="Image3" class="img-responsive" />
+            <h4>Moto Guzzi V85TT 2019</h4>
+        </div>
+        <div class="col-md-6 image-container">
+            <img th:src="@{/assets/im1.jpg}" alt="Image4" class="img-responsive" />
+            <h4>Moto Guzzi V85TT 2021</h4>
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-md-5 mx-auto app-description">
+            <p>Description of app:</p>
+        </div>
+    </div>
+</div>
+</body>
+</html>
