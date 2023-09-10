@@ -11,7 +11,17 @@ import java.util.List;
 public class PathController {
     @RequestMapping("/")
     public String home() {
-        return "redirect:/user";
+        return "redirect:/home";
+    }
+
+    @RequestMapping("/home")
+    public String homePage() {
+        return "homePage";
+    }
+
+    @RequestMapping("/cert")
+    public String certPage() {
+        return "CertPage";
     }
 
     @RequestMapping("/unauthorized")

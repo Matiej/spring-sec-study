@@ -1,5 +1,5 @@
 body {
-  background: #94FFA2 !important;
+  background: #28a745 !important;
 
   font-family: 'Muli', sans-serif;
 }
@@ -75,3 +75,74 @@ box-shadow: 0px 4px 8px rgba(255, 0, 0, 0.1);
 .btn-custom:hover {
   background-color: #DDC3EA; /* or a different shade of the color */
 }
+
+.login-title {
+    text-align: center;
+    margin-bottom: 3%;
+    text-transform: uppercase;
+    font-family: verdana;
+    font-size: 3em;
+    font-weight: 700;
+    color: #f5f5f5;
+    text-shadow: 1px 1px 1px #919191,
+        1px 2px 1px #919191,
+        1px 3px 1px #919191,
+        1px 4px 1px #919191,
+        1px 5px 1px #919191,
+        1px 6px 1px #919191,
+        1px 7px 1px #919191,
+        1px 8px 1px #919191,
+        1px 9px 1px #919191,
+        1px 10px 1px #919191,
+    1px 18px 6px rgba(16,16,16,0.4),
+    1px 22px 10px rgba(16,16,16,0.2),
+    1px 25px 35px rgba(16,16,16,0.2),
+    1px 30px 60px rgba(16,16,16,0.4);
+}
+
+.app-description {
+    margin-top: 30px; /* Adjust the margin to position it according to your preference */
+    border: 1px solid black; /* Thin black border */
+    background-color: #4CAF50; /* Different shade of green, adjust to your preference */
+    padding: 10px; /* Add some padding so the content isn't flush against the border */
+    border-radius: 5px; /* Optional: Makes the borders rounded for a softer look */
+    font-style: italic; /* As per your description styling */
+}
+
+  .image-container {
+    border: 2px solid black;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+
+  .img-responsive {
+    width: 100%;  /* set width to take the full container */
+    height: 450px; /* fixed height */
+    object-fit: cover;
+  }
+
+  .image-row .image-container:not(:last-child) {
+    border-right: 0; /* Remove the right border from the first image in each row */
+  }
+
+  .cert-title {
+      color: #aa1e36; /* Dark grey color */
+      text-shadow: 3px 4px 8px #abc538; /* Deep red shadow */
+
+      font-weight: bold; /* Bold font */
+      font-style: italic;
+      margin: 15px;
+      margin-bottom: 50px;
+    }
+
+    .cert-image {
+      border: 1px solid black;
+      max-width: 100%;
+      height: auto;
+      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s;
+  }
+
+  .cert-image:hover {
+      transform: scale(1.05);
+  }

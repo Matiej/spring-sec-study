@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorator="~{layout.html}"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+  <title>A Secured Page</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <link rel="icon" href="../../favicon.ico" type="image/x-icon">
+  <link th:href="@{/styles/main.css}" rel="stylesheet"/>
+</head>
+<body>
+<h1 layout:fragment="header" class="login-title"
+></h1>
+<div layout:fragment="content" class="container home-container">
+  <hr />
+  <div class="row">
+    <h2 class="text-center cert-title">Certification Title</h2>
+  </div>
+  <div class="row justify-content-center">
+    <div class="col-auto">
+      <a th:href="@{/assets/cert.jpg}" target="_blank">
+        <img th:src="@{/assets/cert.jpg}"alt="Certification Image" class="cert-image">
+      </a>
+    </div>
+  </div>
+</div>
+</body>
+</html>
