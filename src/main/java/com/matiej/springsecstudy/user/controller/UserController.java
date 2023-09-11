@@ -42,7 +42,6 @@ public class UserController {
 
     @GetMapping(params = "form")
     public String createForm(@ModelAttribute CreateUserCommand createUserCommand) {
-        System.out.println(createUserCommand);
         return "users/form";
     }
 
@@ -80,7 +79,7 @@ public class UserController {
     @GetMapping(value = "delete/{id}")
     public ModelAndView delete(@PathVariable("id") String id) {
         userService.deleteUser(Long.valueOf(id));
-        return new ModelAndView("redirect:/");
+        return new ModelAndView("redirect:/user");
     }
 
     @PostMapping(value = "/savePassword")
