@@ -17,12 +17,19 @@ import java.util.stream.Collectors;
 @Getter
 @NoArgsConstructor
 @MatchingPassword
-public class RegisterUserCommand extends UserCommand {
+public class RegisterUserCommand extends UserCommand implements CreateUserMatchPass{
 
     @PasswordsValidator(message = "Password is required")
     private String password;
-//    @NotEmpty(message = "matchingPassword is required.")
     private String matchingPassword;
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getMatchingPassword() {
+        return matchingPassword;
+    }
 
     @Override
     public UserEntity convertToUserEntity(PasswordEncoder passwordEncoder, boolean isEnabled) {

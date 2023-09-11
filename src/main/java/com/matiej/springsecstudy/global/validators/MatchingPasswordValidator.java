@@ -1,14 +1,15 @@
 package com.matiej.springsecstudy.global.validators;
 
+import com.matiej.springsecstudy.user.controller.command.CreateUserMatchPass;
 import com.matiej.springsecstudy.user.controller.command.RegisterUserCommand;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class MatchingPasswordValidator implements ConstraintValidator<MatchingPassword, RegisterUserCommand> {
+public class MatchingPasswordValidator implements ConstraintValidator<MatchingPassword, CreateUserMatchPass> {
 
     @Override
-    public boolean isValid(RegisterUserCommand registerUserCommand, ConstraintValidatorContext constraintValidatorContext) {
-        return registerUserCommand.getPassword().equals(registerUserCommand.getMatchingPassword());
+    public boolean isValid(CreateUserMatchPass command, ConstraintValidatorContext constraintValidatorContext) {
+        return command.getPassword().equals(command.getMatchingPassword());
 
     }
 }

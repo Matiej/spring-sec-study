@@ -2,16 +2,14 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 
-
 <head>
     <title>Layout</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-    <!--    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />-->
     <link th:href="@{/styles/main.css}" rel="stylesheet"/>
     <link rel="icon" href="../favicon.ico" type="image/x-icon">
 </head>
 <body>
-<div class="container">
+<div class="container custom-container">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark rounded">
         <a class="navbar-brand" th:href="@{/home}">Home</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
@@ -21,8 +19,8 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item"><a class="nav-link" th:href="@{/cert}">Cert</a></li>
-                <li class="nav-item" sec:authorize="isAnonymous()"><a class="nav-link"
-                                                                      th:href="@{/users/list}">Users</a>
+                <li class="nav-item" sec:authorize="isAuthenticated()"><a class="nav-link"
+                                                                          th:href="@{/user}">Users</a>
                 </li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('ROLE_ADMIN')"><a class="nav-link"
                                                                                       th:href="@{/admin/admin-settings}">Admin
@@ -30,7 +28,8 @@
                 <li class="nav-item" sec:authorize="hasAnyAuthority('ROLE_ADMIN', 'ROLE_SECURED')"><a class="nav-link"
                                                                                                       th:href="@{/admin/secured}">Secured
                     Page</a></li>
-                <li class="nav-item" sec:authorize="isAnonymous()"><a class="nav-link" th:href="@{/admin/IPSecured}">IP
+                <li class="nav-item" sec:authorize="isAuthenticated()"><a class="nav-link"
+                                                                          th:href="@{/admin/IPSecured}">IP
                     Secured</a></li>
             </ul>
             <ul class="navbar-nav">
@@ -56,85 +55,31 @@
                                         th:if="${#authentication == null}">Login</a></li>
                 <li class="nav-item" sec:authorize="isAuthenticated()"><a class="nav-link"
                                                                           th:href="@{/reg/logout}">Logout</a></li>
-                <li class="nav-item">
-                    <a class="nav-link" style="color: #62DBF6" sec:authorize="isAuthenticated()">User logged:
-                        <span sec:authentication="principal.username">No user logged</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" style="color: green" sec:authorize="isAuthenticated()">Roles:
-                        <span sec:authentication="principal.authorities">roles</span>
-                    </a>
-                </li>
+
             </ul>
         </div>
     </nav>
+    <div class="row" sec:authorize="isAuthenticated()" style="margin-top: 0px">
+        <div class="col-md-5 mx-auto app-description">
 
+            <a class="nav-link" style="color: #62DBF6">User logged:
+                <span sec:authentication="principal.username">No user logged</span>
+            </a>
+
+        </div>
+        <div class="col-md-5 mx-auto app-description">
+
+            <a class="nav-link" style="color: green">Roles:
+                <span sec:authentication="principal.authorities">roles</span>
+            </a>
+
+        </div>
+    </div>
     <section layout:fragment="header">
         <h1>WELCOME TO MY PAGE</h1>
     </section>
 
     <div layout:fragment="content">WELCOME TO MY PAGE</div>
 </div>
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 </body>
 </html>
-
-
-<!--<head>-->
-<!--    <title>Layout</title>-->
-<!--    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">-->
-<!--    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />-->
-<!--    <link th:href="@{/styles/main.css}" rel="stylesheet"/>-->
-<!--    <link rel="icon" href="../favicon.ico" type="image/x-icon">-->
-<!--</head>-->
-<!--<body>-->
-<!--<div class="container">-->
-<!--    <div class="navbar">-->
-<!--        <div class="navbar-inner">-->
-<!--            <a class="brand" th:href="@{/}"> Home </a>-->
-<!--            <ul class="nav">-->
-<!--                <li><a th:href="@{/cert.html}"> Cert </a></li>-->
-<!--            </ul>-->
-<!--            <ul class="nav">-->
-<!--                <li><a th:href="@{/users/list.html}" sec:authorize="isAnonymous()" > Users </a></li>-->
-<!--            </ul>-->
-<!--            <ul class="nav" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">-->
-<!--                <li><a th:href="@{/admin/admin-settings}"> Admin Settings </a></li>-->
-<!--            </ul>-->
-<!--            <ul class="nav" sec:authorize="hasAnyAuthority('ROLE_ADMIN', 'ROLE_SECURED')">-->
-<!--                <li><a th:href="@{/admin/secured}"> Secured Page </a></li>-->
-<!--            </ul>-->
-<!--            <ul class="nav">-->
-<!--                <li><a th:href="@{/admin/IPSecured}" sec:authorize="isAnonymous()"> IP Secured </a></li>-->
-<!--            </ul>-->
-
-<!--            <ul class="nav pull-right" sec:authorize="isAnonymous()">-->
-<!--                <li><a th:href="@{/login}">Login</a></li>-->
-<!--            </ul>-->
-<!--            <ul class="nav pull-right">-->
-<!--                <li><a th:href="@{/reg/logout}" class="menu-right"> Logout </a></li>-->
-<!--            </ul>-->
-<!--            <ul class="nav pull-right">-->
-<!--                <li>-->
-<!--                    <a style="color: #62DBF6">User logged:-->
-<!--                        <span sec:authentication="principal.username">No user logged</span>-->
-<!--                    </a>-->
-<!--                </li>-->
-<!--                <li>-->
-<!--                    <a style="color: green ">Roles:-->
-<!--                        <span sec:authentication="principal.authorities">roles</span>-->
-<!--                    </a>-->
-<!--                </li>-->
-<!--            </ul>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--    <section layout:fragment="header">-->
-<!--        <h1>WELCOME TO MY PAGE</h1>-->
-<!--    </section>-->
-<!--    <div layout:fragment="content">WELCOME TO MY PAGE</div>-->
-<!--</div>-->
-<!--</body>-->
-<!--</html>-->

@@ -42,6 +42,7 @@ public class SecConfig {
     private final TestUser testUser;
     private final DataSource dataSource;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
+    private final static int BCRYPT_STRENGTH = 16;
 
     @Value("${app.security.cookie-token.validity.seconds}")
     private int cookieTokenValidity;
@@ -68,14 +69,15 @@ public class SecConfig {
             "/reg/registerConfirm/**", "/reg/registerConfirm*",
             "/reg/changePassword/**", "/reg/changePassword*",
             "/user/savePassword/**", "/user/savePassword*",
-            "/js/**", "/js*",
+            "/js/**", "/js*", "/js/",
+            "/static/js/**", "/static/js*", "/static/js/",
             "/cert/", "/cert*", "/cert/**",
             "/home/", "/home*", "/home/**"
     };
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder(BCRYPT_STRENGTH);
     }
 
     @Bean

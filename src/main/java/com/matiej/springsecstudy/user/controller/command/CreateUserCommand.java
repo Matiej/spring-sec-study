@@ -1,5 +1,7 @@
 package com.matiej.springsecstudy.user.controller.command;
 
+import com.matiej.springsecstudy.global.validators.MatchingPassword;
+import com.matiej.springsecstudy.global.validators.PasswordsValidator;
 import com.matiej.springsecstudy.user.domain.UserEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,12 +11,18 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Getter
 @Setter
 @NoArgsConstructor
-public class CreateUserCommand extends UserCommand {
+@MatchingPassword
+public class CreateUserCommand extends UserCommand implements CreateUserMatchPass{
+    @PasswordsValidator(message = "Password is required")
+    private String password;
+    private String matchingPassword;
 
     public UserEntity convertToUserEntity(PasswordEncoder passwordEncoder, boolean isEnabled) {
-        UserEntity userEntity = new UserEntity(this.username, passwordEncoder.encode("pass"),
-                passwordEncoder.encode("pass"), this.email);
+        UserEntity userEntity = new UserEntity(this.username, passwordEncoder.encode(this.password),
+                passwordEncoder.encode(this.matchingPassword), this.email);
         userEntity.setEnabled(isEnabled);
         return userEntity;
     }
+
+
 }
