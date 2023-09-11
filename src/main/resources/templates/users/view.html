@@ -34,7 +34,7 @@
         </dl>
         <div class="button-container">
             <a type="button" class="btn btn-danger" sec:authorize="hasAnyRole('ADMIN')"
-               href="" th:href="@{'/user/delete/' + ${user.id}}"
+               href="" th:href="@{'/user/delete/'+ ${user.id}}"
             >Delete
             </a>
             <div class="button-space"  ></div>
