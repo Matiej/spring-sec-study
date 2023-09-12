@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.intercept.RunAsImplAuthenticationProvider;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -28,9 +29,11 @@ import javax.sql.DataSource;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.matiej.springsecstudy.security.MethodSecurityConfig.KEY;
+
 @Configuration
 @EnableWebSecurity
-//todo @EnableGlobalMethodSecurity(prePostEnabled = true) instead @EnableMethodSecurity
+//todo @EnableGlobalMethodSecurity(prePostEnabled = true) instead @EnableMethodSecurity <- this is previous version, has prePostEnabled false as default. New one as true
 @EnableMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
 @EnableConfigurationProperties({DefaultAdmin.class, TestUser.class})
@@ -86,13 +89,21 @@ public class SecConfig {
         return daoAuthenticationProvider;
     }
 
+    //todo ==============> deal to find not depraciated!!
+    @Bean
+    public AuthenticationProvider runAsAuthenticationProvider() {
+        RunAsImplAuthenticationProvider authProvider = new RunAsImplAuthenticationProvider();
+        authProvider.setKey(KEY);
+        return authProvider;
+    }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.headers().frameOptions().sameOrigin(); //important for h2 console
         http.anonymous().disable()
                 .csrf(AbstractHttpConfigurer::disable)// impornat for h2 database console
 
-                //todo JUST FOR TEST TO CHECK expressions!!
+                //todo JUST FOR TEST TO CHECK expressions!! prievious veriosn.
                 /*.authorizeRequests()
                 .requestMatchers(PERMIT_ALL).permitAll()
                 .requestMatchers("/delete/**").hasAuthority("ADMIN")
@@ -146,4 +157,10 @@ public class SecConfig {
             return new AuthorizationDecision(ipAddressList.stream().anyMatch(ipAddressMatcher -> ipAddressMatcher.matches(request)));
         };
     }
+
+
+
+
+
+
 }
