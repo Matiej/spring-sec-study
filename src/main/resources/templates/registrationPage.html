@@ -1,102 +1,109 @@
 <!DOCTYPE html>
 
-<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
-
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorator="layout">
 <head>
     <title>Registration Page</title>
-<!--    <link rel="stylesheet" type="text/css"-->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <link rel="icon" href="../../favicon.ico" type="image/x-icon">
     <link th:href="@{/styles/main.css}" rel="stylesheet"/>
-<!--    <script src="/js/jquery-1.7.2.js"></script>-->
-<!--    <script src="/js/pwstrength.js"></script>-->
     <script th:src="@{/js/jquery-1.7.2.js}"></script>
     <script th:src="@{/js/pwstrength.js}"></script>
 
 </head>
+
 <style>
 body {
   background: #28a745 !important;
   font-family: 'Muli', sans-serif;
 }
 
+
+
+
+
+
 </style>
+
 <body>
 <div class="container">
-    <h1>Registration page</h1>
-    <form id="userForm" th:action="@{/reg/register}" th:object="${user}" action="#" method="post"
-          class="form-horizontal">
-        <div th:if="${#fields.hasErrors('global')}" th:errors="*{global}" class="alert alert-danger">Incorrect password
-            confirmation
+    <h1 layout:fragment="header">Registration page</h1>
+</div>
+<div layout:fragment="content">
+    <form id="userForm" th:action="@{/reg/register}" th:object="${user}" method="post">
+        <div th:if="${#fields.hasErrors('global')}" th:errors="*{global}" class="alert alert-danger">Incorrect
+            password confirmation
         </div>
 
-        <!--        <input type="hidden" th:field="*{id}"/>-->
+        <div class="row">
+            <!-- Username Field -->
+            <div class="col-md-6 form-group" th:classappend="${#fields.hasErrors('username')} ? 'has-danger' : ''">
+                <label for="username">User name</label>
+                <input id="username" type="text" class="form-control" th:field="*{username}"/>
+                <small th:if="${#fields.hasErrors('username')}" th:errors="*{username}"
+                       class="form-text text-danger">Email Error</small>
+            </div>
 
-        <div class="form-group" th:classappend="${#fields.hasErrors('username')} ? 'has-error'">
-            <label class="control-label col-xs-2" for="username">User name</label>
-            <div class="col-xs-10">
-                <input id="username" type="text" title="username" th:field="*{username}"/>
-                <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}"
-                      class="help-block">Email Error</span>
+            <!-- Email Field -->
+            <div class="col-md-6 form-group" th:classappend="${#fields.hasErrors('email')} ? 'has-danger' : ''">
+                <label for="email">Email</label>
+                <input id="email" type="email" class="form-control" th:field="*{email}"/>
+                <small th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="form-text text-danger">Email
+                    Error</small>
             </div>
         </div>
 
-        <div class="form-group" th:classappend="${#fields.hasErrors('email')} ? 'has-error'">
-            <label class="control-label col-xs-2" for="email">Email</label>
-            <div class="col-xs-10">
-                <input id="email" type="email" title="email" th:field="*{email}"/>
-                <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="help-block">Email Error</span>
+        <div class="row">
+            <!-- Password Field -->
+            <div class="col-md-6 form-group" th:classappend="${#fields.hasErrors('password')} ? 'has-danger' : ''">
+                <label for="password">Password</label>
+                <input id="password" name="password" type="password" class="form-control" th:field="*{password}"/>
+                <small th:if="${#fields.hasErrors('password')}" th:errors="*{password}"
+                       class="form-text text-danger">Password Error</small>
+            </div>
+
+            <!-- Password Confirmation Field -->
+            <div class="col-md-6 form-group"
+                 th:classappend="${#fields.hasErrors('matchingPassword')} ? 'has-danger' : ''">
+                <label for="matchingPassword">Password Confirmation</label>
+                <input id="matchingPassword" name="matchingPassword" type="password" class="form-control"
+                       th:field="*{matchingPassword}"/>
+                <small th:if="${#fields.hasErrors('matchingPassword')}" th:errors="*{matchingPassword}"
+                       class="form-text text-danger">Password Confirmation Error</small>
             </div>
         </div>
-        <div class="form-group" th:classappend="${#fields.hasErrors('password')} ? 'has-error'">
-            <label class="control-label col-xs-2" for="password">Password</label>
-            <div class="col-xs-10">
-                <input id="password"
-                       name="password"
-                       type="password" title="password" th:field="*{password}"/>
-                <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"
-                      class="help-block">Password Error</span>
+
+        <div class="row">
+            <div class="col-md-12 form-group">
+                <input type="submit" class="btn btn-primary" value="Register"/>
             </div>
-        </div>
-        <div class="form-group" th:classappend="${#fields.hasErrors('matchingPassword')} ? 'has-error'">
-            <label class="control-label col-xs-2" for="matchingPassword">Password Confirmation</label>
-            <div class="col-xs-10">
-                <input id="matchingPassword"
-                       name="matchingPassword"
-                       type="password" title="matchingPassword" th:field="*{matchingPassword}"/>
-                <span th:if="${#fields.hasErrors('matchingPassword')}" th:errors="*{matchingPassword}"
-                      class="help-block">Password Confirmation Error</span>
-            </div>
-        </div>
-        <div class="form-actions col-xs-offset-2 col-xs-10">
-            <input type="submit" class="btn btn-primary" value="Register"/>
         </div>
     </form>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        options = {
+            common: {
+                minChar: 8
+            },
+            ui: {
+                showVerdictsInsideProgressBar: true,
+                showErrors: true,
+                errorMessages: {
+                    wordLength: 'Your password is too short',
+                    wordNotEmail: 'Do not use your email as your password',
+                    wordSequences: 'Your password contains sequences',
+                    wordLowercase: 'Use lower case characters',
+                    wordUppercase: 'Use upper case characters',
+                    wordOneNumber: 'Use numbers',
+                    wordOneSpecialChar: 'Use special characters: [~!@#$%^&amp;*,_?]'
+                }
+            }
+        };
+        $('#password').pwstrength(options);
+    });
+    </script>
 </div>
-<script type="text/javascript">
-		    $(document)
-			    .ready(
-				    function() {
-					options = {
-					    common : {
-						minChar : 8
-					    },
-					    ui : {
-						showVerdictsInsideProgressBar : true,
-						showErrors : true,
-						errorMessages : {
-						    wordLength : 'Your password is too short',
-						    wordNotEmail : 'Do not use your email as your password',
-						    wordSequences : 'Your password contains sequences',
-						    wordLowercase : 'Use lower case characters',
-						    wordUppercase : 'Use upper case characters',
-						    wordOneNumber : 'Use numbers',
-						    wordOneSpecialChar : 'Use special characters: [~!@#$%^&amp;*,_?]'
-						}
-					    }
-					};
-					$('#password').pwstrength(options);
-				    });
-</script>
 </body>
+
 </html>

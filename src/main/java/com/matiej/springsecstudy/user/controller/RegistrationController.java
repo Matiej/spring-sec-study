@@ -2,7 +2,7 @@ package com.matiej.springsecstudy.user.controller;
 
 import com.matiej.springsecstudy.user.application.UserQueryResponse;
 import com.matiej.springsecstudy.user.application.UserService;
-import com.matiej.springsecstudy.user.controller.command.RegisterUserCommand;
+import com.matiej.springsecstudy.user.controller.command.CreateUserCommand;
 import com.matiej.springsecstudy.user.domain.UserEntity;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -25,11 +25,11 @@ public class RegistrationController {
 
     @GetMapping(value = "/signup")
     public ModelAndView registrationForm() {
-        return new ModelAndView("registrationPage", "user", new RegisterUserCommand());
+        return new ModelAndView("registrationPage", "user", new CreateUserCommand());
     }
 
     @PostMapping(value = "/register")
-    public ModelAndView registerUser(@Valid final RegisterUserCommand user, final BindingResult result,
+    public ModelAndView registerUser(@Valid final CreateUserCommand user, final BindingResult result,
                                      final HttpServletRequest request, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             return new ModelAndView("registrationPage", "user", user);
