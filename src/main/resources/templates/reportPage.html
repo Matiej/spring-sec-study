@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+    <title>Users : Create</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="icon" href="../../favicon.ico" type="image/x-icon">
+    <link th:href="@{/styles/main.css}" rel="stylesheet"/>
+    <script th:src="@{/js/jquery-1.7.2.js}"></script>
+    <script th:src="@{/js/pwstrength.js}"></script>
+</head>
+<body>
+<div class="container">
+    <h1 layout:fragment="header" class="normal-title">THIS IS REPORT PAGE </h1>
+    <div layout:fragment="content">
+
+        <div class="col-md-5 mx-auto app-description">
+            <p>THIS is special report page, that runs one method in controller</p>
+            <p>For each user without special privileges. </p>
+            <p>But only for this one method privileges are elevated  </p>
+            <i>Another scenario where Run-As is useful is if you simply need to temporarily elevate the privileges of the current user
+                for an one-off operation. For example, let’s say we’re generating a new report that needs to access more data than the
+                user may regularly need to see. One way to do this would be - we could log out and log back in with a
+                reporting user that has more authorities.The Run-As functionality is another good way to go so that you
+                don't have to go through this log out - log in process</i>
+            <br>
+            <dt>-RunAsServiceClass</dt>
+            <dd id="runas" th:text="${report}">runas</dd>
+        </div>
+    </div>
+</div>
+
+</div>
+
+</body>
+
+</html>
