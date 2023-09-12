@@ -7,7 +7,6 @@ import com.matiej.springsecstudy.user.application.UserQueryResponse;
 import com.matiej.springsecstudy.user.application.UserService;
 import com.matiej.springsecstudy.user.controller.command.CreateUserCommand;
 import com.matiej.springsecstudy.user.controller.command.ModifyUserCommand;
-import com.matiej.springsecstudy.user.controller.command.RegisterUserCommand;
 import com.matiej.springsecstudy.user.database.RolesRepository;
 import com.matiej.springsecstudy.user.database.UserRepository;
 import com.matiej.springsecstudy.user.database.VerificationTokenRepository;
@@ -17,7 +16,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +32,7 @@ public class UserServiceImpl implements UserService {
     private final VerificationTokenRepository tokenRepository;
     private final EmailService emailService;
     private final RolesRepository rolesRepository;
-    private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public List<UserEntity> findAll() {
@@ -65,11 +63,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserQueryResponse registerNewUser(RegisterUserCommand registerUserCommand, HttpServletRequest request) {
+    public UserQueryResponse registerNewUser(CreateUserCommand registerUserCommand, HttpServletRequest request) {
         if (isUserExist(registerUserCommand.getEmail())) {
             throw new IllegalArgumentException("There is an account with email: " + registerUserCommand.getEmail());
         }
-
 
         UserEntity userEntity = registerUserCommand.convertToUserEntity(passwordEncoder, false, findRole(RoleType.USER));
 

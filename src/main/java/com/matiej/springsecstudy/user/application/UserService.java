@@ -2,7 +2,6 @@ package com.matiej.springsecstudy.user.application;
 
 import com.matiej.springsecstudy.user.controller.command.CreateUserCommand;
 import com.matiej.springsecstudy.user.controller.command.ModifyUserCommand;
-import com.matiej.springsecstudy.user.controller.command.RegisterUserCommand;
 import com.matiej.springsecstudy.user.domain.UserEntity;
 import com.matiej.springsecstudy.user.domain.UserToken;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,7 +19,7 @@ public interface UserService {
 
     Optional<UserQueryResponse> findById(Long id);
 
-    UserQueryResponse registerNewUser(RegisterUserCommand user, HttpServletRequest request);
+    UserQueryResponse registerNewUser(CreateUserCommand user, HttpServletRequest request);
 
     Optional<UserEntity> findByName(String username);
     Optional<UserQueryResponse> findByEmail(String email);
