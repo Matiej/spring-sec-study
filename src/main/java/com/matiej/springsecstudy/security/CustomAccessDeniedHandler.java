@@ -4,7 +4,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.util.Strings;
-import org.springframework.data.auditing.AuditingHandler;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,11 +12,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @Component

@@ -1,7 +1,6 @@
 package com.matiej.springsecstudy.global.validators;
 
 import com.matiej.springsecstudy.user.controller.command.CreateUserMatchPass;
-import com.matiej.springsecstudy.user.controller.command.RegisterUserCommand;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
