@@ -1,4 +1,4 @@
-package com.matiej.springsecstudy.user.controller;
+package com.matiej.springsecstudy.web;
 
 import com.matiej.springsecstudy.user.application.UserService;
 import jakarta.servlet.http.HttpServletRequest;

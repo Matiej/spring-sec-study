@@ -1,4 +1,4 @@
-package com.matiej.springsecstudy.user.controller;
+package com.matiej.springsecstudy.web;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
