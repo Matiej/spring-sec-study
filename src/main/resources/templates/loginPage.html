@@ -1,23 +1,20 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
-      layout:decorator="~{layout.html}"-
+      layout:decorator="~{layout.html}" - lang="en"
 >
-<!--      layout:decorator="~{layout.html}"-->
 
-<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Login page</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <link th:href="@{/styles/main.css}" rel="stylesheet"/>
     <link rel="icon" href="../favicon.ico" type="image/x-icon">
-
 </head>
 <style>
 
 </style>
-<body style="background-color: #28a745">
+<body>
 <div class="pt-5">
     <h1 layout:fragment="header" class="login-title"
     >Welcome to spring security app logging</h1>
