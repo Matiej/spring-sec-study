@@ -5,8 +5,12 @@ import com.matiej.springsecstudy.user.application.UserService;
 import com.matiej.springsecstudy.user.controller.command.CreateUserCommand;
 import com.matiej.springsecstudy.user.domain.UserEntity;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.util.Strings;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -100,10 +104,29 @@ public class RegistrationController {
         return "loginPage";
     }
 
-    @GetMapping("/logout")
-    public String logout(@ModelAttribute("message") String message, Model model) {
-        model.addAttribute("message", message);
-        return "logoutPage";
+    @RequestMapping("/pre-logout")
+    public String preLogout(HttpServletRequest request, RedirectAttributes redirectAttributes) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null) {
+            request.getSession().setAttribute("lastLoggedOutUsername", auth.getName());
+            redirectAttributes.addFlashAttribute("lastLoggedOutUsername", auth.getName());
+        }
+        SecurityContextHolder.clearContext();
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+        return  "redirect:/reg/logout" ;
     }
 
+    @RequestMapping("/logout")
+    public ModelAndView logout(HttpServletRequest request ) {
+        String errorMessage = (String) request.getSession().getAttribute("errorMessage");
+        if(Strings.isNotEmpty(errorMessage)) {
+            request.getSession().removeAttribute("errorMessage");
+            return new ModelAndView("error", "errorMessage", errorMessage);
+        }
+
+        return new ModelAndView("logoutPage" );
+    }
 }

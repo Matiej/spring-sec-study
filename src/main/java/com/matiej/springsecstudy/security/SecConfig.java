@@ -59,6 +59,7 @@ public class SecConfig {
             "/h2-console*",
             "/reg/login", "/reg/login/**", "/reg/login*",
             "/reg/logout", "/reg/logout/**", "/reg/logout*",
+            "/reg/pre-logout", "/reg/pre-logout/**", "/reg/pre-logout*",
             "/reg/signup",
             "/reg/signup*",
             "/reg/signup/**",
@@ -136,7 +137,7 @@ public class SecConfig {
                 //data base storing
                 .tokenRepository(persistentTokenRepository())
 
-                .and().logout().permitAll().logoutUrl("/reg/logout").logoutSuccessUrl("/")
+//                .and().logout().permitAll().logoutUrl("/logout").logoutSuccessUrl("/reg/logout") todo -> decidet to handle it manualy to keep users name. If find another way will change
 
                 .and().exceptionHandling().accessDeniedHandler(customAccessDeniedHandler);
 
