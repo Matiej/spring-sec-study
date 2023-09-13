@@ -30,7 +30,6 @@ public class SendingService {
     @Value("${email.resending.attemptsLimit}")
     private int attemptsLimit;
 
-    @Async
     public void sendAnEmail(SendingRequest request) {
         SimpleMailMessage simpleMailMessage = constructEmailMessage(request);
 

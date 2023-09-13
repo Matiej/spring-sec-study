@@ -17,5 +17,7 @@ public class AsyncBeanRun {
         } else {
             System.out.println("auto for new thread is null!!!! no sharing of auth between threads!!!");
         }
+
+        //todo doesn't work for me. There should be visible auth from getContext.
     }
 }

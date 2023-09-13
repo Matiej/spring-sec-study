@@ -42,6 +42,7 @@ public class UserServiceImpl implements UserService {
     public List<UserEntity> findAll() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         System.out.println("Outside Async: " + auth);
+        SecurityContextHolder.setStrategyName("MODE_INHERITABLETHREADLOCAL");
         ascc.assync();
         return userRepository.findAll();
     }

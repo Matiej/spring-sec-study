@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
-@EnableAsync
 @Component
 @RequiredArgsConstructor
 public class EmailSendingScheduler {
@@ -27,7 +26,6 @@ public class EmailSendingScheduler {
     @Value("${email.resending.attemptsLimit}")
     private int attemptsLimit;
 
-    @Async
     @Scheduled(cron = "${email.resending.cron}")
     public void resendingErrorEmails() {
         log.info("Starting scheduled job: " + this.getClass().getSimpleName());
