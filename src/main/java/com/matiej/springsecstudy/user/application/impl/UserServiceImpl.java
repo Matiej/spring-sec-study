@@ -3,6 +3,7 @@ package com.matiej.springsecstudy.user.application.impl;
 import com.matiej.springsecstudy.email.application.EmailService;
 import com.matiej.springsecstudy.email.application.SendEmailCommand;
 import com.matiej.springsecstudy.email.domain.EmailType;
+import com.matiej.springsecstudy.report.AsyncBeanRun;
 import com.matiej.springsecstudy.user.application.UserQueryResponse;
 import com.matiej.springsecstudy.user.application.UserService;
 import com.matiej.springsecstudy.user.controller.command.CreateUserCommand;
@@ -15,6 +16,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -33,9 +36,14 @@ public class UserServiceImpl implements UserService {
     private final EmailService emailService;
     private final RolesRepository rolesRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AsyncBeanRun ascc;
 
     @Override
     public List<UserEntity> findAll() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println("Outside Async: " + auth);
+        SecurityContextHolder.setStrategyName("MODE_INHERITABLETHREADLOCAL");
+        ascc.assync();
         return userRepository.findAll();
     }
 

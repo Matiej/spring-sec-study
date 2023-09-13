@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.access.intercept.RunAsImplAuthenticationProvider;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -37,6 +38,8 @@ import static com.matiej.springsecstudy.security.MethodSecurityConfig.KEY;
 @EnableMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
 @EnableConfigurationProperties({DefaultAdmin.class, TestUser.class})
+@EnableAsync //todo By default, the SecurityContentHolder uses a ThreadLocal to store these details, which means that it’s transparently (and correctly) holding on to a context per thread.
+//todo The problem with that approach is that - if we’re working with @Async - the new thread will no longer be able to access to the same principal as the main thread.
 public class SecConfig {
     private final UserService userService;
     private final DefaultAdmin defaultAdmin;
@@ -59,6 +62,7 @@ public class SecConfig {
             "/h2-console*",
             "/reg/login", "/reg/login/**", "/reg/login*",
             "/reg/logout", "/reg/logout/**", "/reg/logout*",
+            "/reg/pre-logout", "/reg/pre-logout/**", "/reg/pre-logout*",
             "/reg/signup",
             "/reg/signup*",
             "/reg/signup/**",
@@ -136,7 +140,7 @@ public class SecConfig {
                 //data base storing
                 .tokenRepository(persistentTokenRepository())
 
-                .and().logout().permitAll().logoutUrl("/reg/logout").logoutSuccessUrl("/")
+//                .and().logout().permitAll().logoutUrl("/logout").logoutSuccessUrl("/reg/logout") todo -> decidet to handle it manualy to keep users name. If find another way will change
 
                 .and().exceptionHandling().accessDeniedHandler(customAccessDeniedHandler);
 
