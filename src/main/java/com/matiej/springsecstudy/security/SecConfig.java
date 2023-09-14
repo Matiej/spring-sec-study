@@ -22,6 +22,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
+import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.util.matcher.IpAddressMatcher;
@@ -47,6 +48,7 @@ public class SecConfig {
     private final DataSource dataSource;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
     private final PasswordEncoder passwordEncoder;
+    private final LoggingFilter myCustomNewFilter;
     @Value("${app.security.cookie-token.validity.seconds}")
     private int cookieTokenValidity;
     @Value("${app.security.cookie-key}")
@@ -103,7 +105,8 @@ public class SecConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.headers().frameOptions().sameOrigin(); //important for h2 console
+        http.addFilterBefore(myCustomNewFilter, AnonymousAuthenticationFilter.class)
+                .headers().frameOptions().sameOrigin(); //important for h2 console
         http.anonymous().disable()
                 .csrf(AbstractHttpConfigurer::disable)// impornat for h2 database console
 
