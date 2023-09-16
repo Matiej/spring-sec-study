@@ -32,6 +32,9 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
             errorMessage = "User: " + remoteUser + " with ROLES: " + roles + " doesn't have permission to access this page!";
         } else if (requestURI.contains("/IPSecured")) {
             errorMessage = "User: " + remoteUser + " with IP: " + request.getRemoteAddr() + " doesn't have permission to access this page!";
+        } else if (requestURI.contains("/runas")) {
+            errorMessage = "User: " + remoteUser + " with IP: " + request.getRemoteAddr() + " doesn't have permission to access this page! " +
+                    "Access only with roles: ROLE_USER, RUN_AS_REPORTER";
         }
         request.getSession().setAttribute("errorMessage", errorMessage);
         response.sendRedirect(request.getContextPath() + "/unauthorized");

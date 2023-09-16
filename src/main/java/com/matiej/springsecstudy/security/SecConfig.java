@@ -3,6 +3,7 @@ package com.matiej.springsecstudy.security;
 import com.matiej.springsecstudy.user.application.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +15,7 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.authorization.AuthorizationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -39,7 +41,8 @@ import static com.matiej.springsecstudy.security.MethodSecurityConfig.KEY;
 @EnableMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
 @EnableConfigurationProperties({DefaultAdmin.class, TestUser.class})
-@EnableAsync //todo By default, the SecurityContentHolder uses a ThreadLocal to store these details, which means that it’s transparently (and correctly) holding on to a context per thread.
+@EnableAsync
+//todo By default, the SecurityContentHolder uses a ThreadLocal to store these details, which means that it’s transparently (and correctly) holding on to a context per thread.
 //todo The problem with that approach is that - if we’re working with @Async - the new thread will no longer be able to access to the same principal as the main thread.
 public class SecConfig {
     private final UserService userService;
@@ -49,6 +52,7 @@ public class SecConfig {
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
     private final PasswordEncoder passwordEncoder;
     private final LoggingFilter myCustomNewFilter;
+    private final CustomAuthenticationProvider provider;
     @Value("${app.security.cookie-token.validity.seconds}")
     private int cookieTokenValidity;
     @Value("${app.security.cookie-key}")
@@ -103,11 +107,19 @@ public class SecConfig {
         return authProvider;
     }
 
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder authenticationManager) {
+        authenticationManager.authenticationProvider(provider);
+    }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.addFilterBefore(myCustomNewFilter, AnonymousAuthenticationFilter.class)
-                .headers().frameOptions().sameOrigin(); //important for h2 console
-        http.anonymous().disable()
+        http
+                .addFilterBefore(myCustomNewFilter, AnonymousAuthenticationFilter.class)
+                .headers().frameOptions().sameOrigin()//important for h2 console
+
+                .and()
+                .anonymous().disable()
                 .csrf(AbstractHttpConfigurer::disable)// impornat for h2 database console
 
                 //todo JUST FOR TEST TO CHECK expressions!! prievious veriosn.
@@ -119,15 +131,17 @@ public class SecConfig {
                 .anyRequest().authenticated().and()*/
 
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(PERMIT_ALL).permitAll()
+                                .requestMatchers(PERMIT_ALL).permitAll()
 
 //                        .requestMatchers("/delete/**").hasAuthority("ADMIN") //todo here can access only ADMIN + ROLE_ADMIN
 //                        .requestMatchers("/secured*", "/secured/**", "/secured").hasRole("ADMIN")//todo secured will access user that has ROLE_ADMIN  in DB
 
-                        .requestMatchers("/user/delete/**").hasRole("ADMIN") // todo  will access user that has ROLE_ADMIN  in DB
-                        .requestMatchers("/admin/secured*", "/admin/secured**", "/admin/secured").hasAnyAuthority("ROLE_ADMIN", "ROLE_SECURED")//todo here can access only SECURED + ROLE_SECURED in db
-                        .requestMatchers("/admin/IPSecured*", "/admin/IPSecured**", "/admin/IPSecured").access(hasAnyIpAddress("127.0.0.1", "0:0:0:0:0:0:0:1"))
-                        .anyRequest().authenticated())
+                                .requestMatchers("/user/delete/**").hasRole("ADMIN") // todo  will access user that has ROLE_ADMIN  in DB
+                                .requestMatchers("/admin/secured*", "/admin/secured**", "/admin/secured").hasAnyAuthority("ROLE_ADMIN", "ROLE_SECURED")//todo here can access only SECURED + ROLE_SECURED in db
+                                .requestMatchers("/admin/IPSecured*", "/admin/IPSecured**", "/admin/IPSecured").access(hasAnyIpAddress("127.0.0.1", "0:0:0:0:0:0:0:1"))
+                                .anyRequest().authenticated()
+                )
+
                 .formLogin()
                 .loginPage("/reg/login").permitAll()
                 .loginProcessingUrl("/do-logging")
@@ -157,17 +171,13 @@ public class SecConfig {
         return jdbcTokenRepository;
     }
 
-    private static AuthorizationManager<RequestAuthorizationContext> hasAnyIpAddress(String ... ipAddress) {
+    private static AuthorizationManager<RequestAuthorizationContext> hasAnyIpAddress(String... ipAddress) {
         List<IpAddressMatcher> ipAddressList = Arrays.stream(ipAddress).map(IpAddressMatcher::new).toList();
         return (authentication, context) -> {
             HttpServletRequest request = context.getRequest();
             return new AuthorizationDecision(ipAddressList.stream().anyMatch(ipAddressMatcher -> ipAddressMatcher.matches(request)));
         };
     }
-
-
-
-
 
 
 }

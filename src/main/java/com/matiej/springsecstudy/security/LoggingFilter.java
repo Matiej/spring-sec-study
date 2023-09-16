@@ -20,7 +20,7 @@ public class LoggingFilter extends GenericFilterBean {
         final HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         final String url = httpServletRequest.getRequestURL().toString();
         final String queryString = Optional.ofNullable(httpServletRequest.getQueryString()).map(value -> "?" + value).orElse("");
-        log.info(String.format("applying SecStudyAppFilter for URI: %s%s", url, queryString));
+        log.info(String.format("applying my own Logging Filter: SecStudyAppFilter for URI: %s%s", url, queryString));
 
         filterChain.doFilter(servletRequest, servletResponse);
     }

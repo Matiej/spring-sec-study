@@ -15,6 +15,8 @@ public class AsyncBeanRun {
             System.out.println("THIISSS IS TEST->>>>>> thread name: " + Thread.currentThread().getName() + " authUser: " + name);
             System.out.println("================Another async annotation is in sendingEmailService -------------");
         } else {
+            System.out.println("THIISSS IS TEST->>>>>> thread name: " + Thread.currentThread().getName());
+
             System.out.println("auto for new thread is null!!!! no sharing of auth between threads!!!");
         }
 
