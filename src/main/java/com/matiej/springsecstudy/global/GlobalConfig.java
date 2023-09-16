@@ -42,7 +42,7 @@ public class GlobalConfig {
     public TaskScheduler taskScheduler() {
         ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
         threadPoolTaskScheduler.setPoolSize(5);
-        threadPoolTaskScheduler.setThreadNamePrefix("ThreadPoolTaskScheduler");
+        threadPoolTaskScheduler.setThreadNamePrefix("mySECAPP_ThreadPoolTaskScheduler");
         return threadPoolTaskScheduler;
     }
 
