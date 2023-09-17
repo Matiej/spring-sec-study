@@ -1,5 +1,6 @@
 package com.matiej.springsecstudy.security;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,12 +20,12 @@ import java.util.ArrayList;
 //        In a production implementation-for a real integration with a third party authentication service-where you’ll have a lot more info to work with.
 //        So,we'll need to throw very specific exceptions based on the actual problem that occurred.
 
-@Component
+@Slf4j
 public class CustomAuthenticationProvider implements AuthenticationProvider {
-
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+        log.info("CustomAuthenticationProvider invoked with authentication: {}", authentication);
         String name = authentication.getName();
         String pass = authentication.getCredentials().toString();
         if (!supportsAuthentication(authentication)) {

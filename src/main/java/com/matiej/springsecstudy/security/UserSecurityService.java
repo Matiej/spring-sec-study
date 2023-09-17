@@ -6,9 +6,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class UserSecurityService {
-    private final AuthenticationManager authenticationManager;
+//    private final AuthenticationManager authenticationManager;
 
     public boolean isOwnerOrAdmin(String owner, UserEntityDetails userEntityDetails) {
         return isAdmin(userEntityDetails) || isOwner(owner, userEntityDetails.getUsername());
