@@ -42,17 +42,9 @@ public class UserServiceImpl implements UserService {
     public List<UserEntity> findAll() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         System.out.println("Outside Async: " + auth);
+        System.out.println("Before async outside ->>>>>> thread name: " + Thread.currentThread().getName());
         ascc.assync();
-        Authentication authentication = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null) {
-            String name = authentication.getName();
-            System.out.println("THIISSS IS TEST->>>>>> thread name: " + Thread.currentThread().getName() + "After async method: authUser: " + name);
-            System.out.println("================Another async annotation is in sendingEmailService -------------");
-        } else {
-            System.out.println("THIISSS IS TEST->>>>>> thread name: " + Thread.currentThread().getName());
-
-            System.out.println("auto for new thread is null!!!! no sharing of auth between threads!!!");
-        }
+        System.out.println("After async outside ->>>>>> thread name: " + Thread.currentThread().getName());
         return userRepository.findAll();
     }
 

@@ -3,7 +3,6 @@ package com.matiej.springsecstudy.security;
 import com.matiej.springsecstudy.user.application.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -12,11 +11,10 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.access.intercept.RunAsImplAuthenticationProvider;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.authorization.AuthorizationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -30,6 +28,7 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
 import org.springframework.security.web.util.matcher.IpAddressMatcher;
 
 import javax.sql.DataSource;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -52,7 +51,6 @@ public class SecConfig {
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
     private final PasswordEncoder passwordEncoder;
     private final LoggingFilter myCustomNewFilter;
-    private final CustomAuthenticationProvider provider;
     @Value("${app.security.cookie-token.validity.seconds}")
     private int cookieTokenValidity;
     @Value("${app.security.cookie-key}")
@@ -85,13 +83,19 @@ public class SecConfig {
             "/home/", "/home*", "/home/**"
     };
 
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
-    }
+//    @Bean
+//    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+//        return authenticationConfiguration.getAuthenticationManager();
+//    }
 
+    //todo new AutheticationManager provides custom one and default dao -> authenticationProvider()
     @Bean
-    public AuthenticationProvider authenticationProvider() {
+    public AuthenticationProvider customAuthenticationProvider() {
+        return new CustomAuthenticationProvider();
+    }
+//
+    @Bean
+    public AuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
         daoAuthenticationProvider.setUserDetailsService(new UserEntityDetailService(userService, defaultAdmin, testUser));
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder);
@@ -107,15 +111,41 @@ public class SecConfig {
         return authProvider;
     }
 
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder authenticationManager) {
-        authenticationManager.authenticationProvider(provider);
+    @Bean
+    public AuthenticationManager authenticationManager() {
+        List<AuthenticationProvider> providers = new ArrayList<>();
+        providers.add(customAuthenticationProvider());
+        providers.add(daoAuthenticationProvider());
+        providers.add(runAsAuthenticationProvider());
+        return new ProviderManager(providers);
     }
+//
+//    @Bean
+//    public AuthenticationManager authenticationManager() throws Exception {
+//        List<AuthenticationProvider> authenticationProviderList = new ArrayList<>();
+//        authenticationProviderList.add(new CustomAuthenticationProvider());
+//        authenticationProviderList.add(daoAuthenticationProvider());
+//        return new ProviderManager(authenticationProviderList);
+//    }
+
+    //todo this one works and involve my customManager. AuthManager, doesnt :(
+//    @Autowired
+//    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+//        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+//        daoAuthenticationProvider.setUserDetailsService(new UserEntityDetailService(userService, defaultAdmin, testUser));
+//        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder);
+//        daoAuthenticationProvider.setHideUserNotFoundExceptions(false);// these exception after that setting is not wrapped by BadCredentialsException anymore
+////        auth.authenticationProvider(customAuthenticationProvider);
+//        ;
+//        // auth.authenticationProvider(daoAuthProvider).authenticationProvider(customAuthenticationProvider);
+//
+//        auth.parentAuthenticationManager(new ProviderManager(List.of(customAuthenticationProvider, daoAuthenticationProvider)));
+//    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .addFilterBefore(myCustomNewFilter, AnonymousAuthenticationFilter.class)
+//                .addFilterBefore(myCustomNewFilter, AnonymousAuthenticationFilter.class)
                 .headers().frameOptions().sameOrigin()//important for h2 console
 
                 .and()
