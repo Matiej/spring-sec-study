@@ -1,5 +1,7 @@
 package com.matiej.springsecstudy.user.controller;
 
+import com.matiej.springsecstudy.security.ActiveUserTrackingService;
+import com.matiej.springsecstudy.user.application.AllUsersResponse;
 import com.matiej.springsecstudy.user.application.UserQueryResponse;
 import com.matiej.springsecstudy.user.application.UserService;
 import com.matiej.springsecstudy.user.controller.command.CreateUserCommand;
@@ -24,11 +26,10 @@ import java.util.Optional;
 public class UserController {
     private final UserService userService;
 
-
     @GetMapping()
     public ModelAndView list() {
-        List<UserQueryResponse> userQueryResponses = UserQueryResponse.convertToResponse(userService.findAll());
-        return new ModelAndView("users/list", "users", userQueryResponses);
+        AllUsersResponse usersResponse = userService.findAll();
+        return new ModelAndView("users/list", "users", usersResponse);
     }
 
     @GetMapping("/{id}")
