@@ -22,6 +22,8 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
@@ -55,6 +57,7 @@ public class SecConfig {
     private final PasswordEncoder passwordEncoder;
     private final LoggingFilter myCustomNewFilter;
     private final CustomAuthenticationProvider customAuthenticationProvider;
+    private final SessionRegistry sessionRegistry;
     @Value("${app.security.cookie-token.validity.seconds}")
     private int cookieTokenValidity;
     @Value("${app.security.cookie-key}")
@@ -183,7 +186,11 @@ public class SecConfig {
 
 //                .and().logout().permitAll().logoutUrl("/logout").logoutSuccessUrl("/reg/logout") todo -> decidet to handle it manualy to keep users name. If find another way will change
 
-                .and().exceptionHandling().accessDeniedHandler(customAccessDeniedHandler);
+                .and().exceptionHandling().accessDeniedHandler(customAccessDeniedHandler)
+                //Session registry part
+                .and().sessionManagement().maximumSessions(1).sessionRegistry(sessionRegistry)
+                //cosing sessionManagament configuration   need to close out the configuration here by also defining session fixation:
+                .and().sessionFixation().none();
 
         return http.build();
     }
@@ -202,6 +209,4 @@ public class SecConfig {
             return new AuthorizationDecision(ipAddressList.stream().anyMatch(ipAddressMatcher -> ipAddressMatcher.matches(request)));
         };
     }
-
-
 }

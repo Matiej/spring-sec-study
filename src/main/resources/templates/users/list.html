@@ -22,18 +22,27 @@
             <th style="text-align: center">Created</th>
         </tr>
         </thead>
-        <tbody>
-        <tr th:if="${users.empty}">
+        <tbody style="background-color: #4CAF50;">
+        <tr th:if="${users.userQueryResponseList.empty}">
             <td colspan="3">No users</td>
         </tr>
-        <tr th:each="user : ${users}">
+        <tr th:each="user : ${users.userQueryResponseList}">
             <td><a style="color: black" href="view.html" th:href="@{'user/' + ${user.id}}" th:text="${user.username}">
                 Username </a></td>
             <td th:text="${#temporals.format(user.createdAt, 'yyyy/MM/dd HH:mm:ss')}">July 11, 2012 2:17:16 PM CDT</td>
         </tr>
         </tbody>
     </table>
-    <div class="container" style="text-align: center"  sec:authorize="hasAuthority('ADMIN')">
+    <div class="row">
+        <div  style="margin: 5%; border-style: double; padding: 15px; background-color: #4CAF50;" th:if="${!users.activeUserList.empty}">
+            <b style="color:#223D8C">ACTIVE USERS FROM SessionRegistry</b>
+            <ul >
+                <li th:each="username : ${users.activeUserList}" th:text="${username}">Active User</li>
+
+            </ul>
+        </div>
+    </div>
+    <div class="container" style="text-align: center" sec:authorize="hasAuthority('ADMIN')">
         <div class="row">
             <h1 style="color: red">THIS IS SPECIAL DATA FOR ADMIN AND ROLE_ADMIN AS WELL - hasAuthority('ADMIN')</h1>
             <h4>Choice your destiny!</h4>
@@ -45,7 +54,7 @@
             </div>
         </div>
     </div>
-    <div class="container" style="text-align: center"  sec:authorize="hasRole('ADMIN')">
+    <div class="container" style="text-align: center" sec:authorize="hasRole('ADMIN')">
         <div class="row">
             <h1>THIS IS SPECIAL DATA FOR ROLE_ADMINS - hasRole('ADMIN)'</h1>
             <h4>Choice your destiny!</h4>

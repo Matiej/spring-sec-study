@@ -4,6 +4,8 @@ import com.matiej.springsecstudy.email.application.EmailService;
 import com.matiej.springsecstudy.email.application.SendEmailCommand;
 import com.matiej.springsecstudy.email.domain.EmailType;
 import com.matiej.springsecstudy.report.AsyncBeanRun;
+import com.matiej.springsecstudy.security.ActiveUserTrackingService;
+import com.matiej.springsecstudy.user.application.AllUsersResponse;
 import com.matiej.springsecstudy.user.application.UserQueryResponse;
 import com.matiej.springsecstudy.user.application.UserService;
 import com.matiej.springsecstudy.user.controller.command.CreateUserCommand;
@@ -23,6 +25,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -37,15 +40,19 @@ public class UserServiceImpl implements UserService {
     private final RolesRepository rolesRepository;
     private final PasswordEncoder passwordEncoder;
     private final AsyncBeanRun ascc;
+    private final ActiveUserTrackingService activeUserTrackingService;
 
     @Override
-    public List<UserEntity> findAll() {
+    public AllUsersResponse findAll() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         System.out.println("Outside Async: " + auth);
         System.out.println("Before async outside ->>>>>> thread name: " + Thread.currentThread().getName());
         ascc.assync();
         System.out.println("After async outside ->>>>>> thread name: " + Thread.currentThread().getName());
-        return userRepository.findAll();
+        List<String> activeUsers = activeUserTrackingService.getAllActiveUsers();
+        List<UserQueryResponse> userQueryResponses = UserQueryResponse.convertToResponse(userRepository.findAll());
+
+        return new AllUsersResponse(userQueryResponses, activeUsers);
     }
 
     @Override

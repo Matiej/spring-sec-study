@@ -20,6 +20,7 @@ public class UserQueryResponse {
     private LocalDateTime createdAt;
     private List<String> roles;
     private String email;
+    private List<String> activeUsers;
 
     public static UserQueryResponse convertToResponse(UserEntity userEntity) {
         return UserQueryResponse.builder()
