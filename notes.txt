@@ -1,0 +1,14 @@
+Balagan w securityConfig.
+Pokazuje rozne metody podejscia aby dodac customProvider do AuthenticationManager.
+Działa tylko wersja :
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(daoAuthenticationProvider())
+                .authenticationProvider(runAsAuthenticationProvider())
+                .authenticationProvider(customAuthenticationProvider);
+    }
+    Specjalnie napisany customProvider aby obsługiwał userDetails ze springa. W przeciwnym
+    wypadku wywalały się templatki chcce w principal znajdować różne pola jak name etc.
+Dla CustomProvidera przygotowany jest user (hardcoded w customProvider)
+HIRD_PARTY_USER_NAME = "3rdUser"; - nazwa usea jest wazna. Haslo nie ma znaczenia
+__________________
