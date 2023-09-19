@@ -30,14 +30,18 @@
             <dt>-Email:</dt>
             <dd id="email" th:text="${user.email}">Email</dd>
             <dt>-User roles:</dt>
-            <dd id="roles" sec:authentication="principal.authorities">Roles</dd>
+            <dd id="roles">
+                <ul>
+                    <li th:each="role : ${user.roles}" th:text="${role}"></li>
+                </ul>
+            </dd>
         </dl>
         <div class="button-container">
             <a type="button" class="btn btn-danger" sec:authorize="hasAnyRole('ADMIN')"
                href="" th:href="@{'/user/delete/'+ ${user.id}}"
             >Delete
             </a>
-            <div class="button-space"  ></div>
+            <div class="button-space"></div>
             <a type="button" class="btn btn-warning"
                href="form.html" style="color: green"
                th:href="@{'/user/modify/' + ${user.id}}"

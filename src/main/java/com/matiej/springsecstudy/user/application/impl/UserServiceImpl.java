@@ -25,10 +25,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -57,7 +55,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserQueryResponse save(CreateUserCommand user) {
-        UserEntity savedUser = userRepository.save(user.convertToUserEntity(passwordEncoder, true));
+        Set<Role> roles = user.getRoles()
+                .stream()
+                .map(RoleType::valueOf)
+                .map(this::findRole)
+                .collect(Collectors.toSet());
+        UserEntity savedUser = userRepository.save(user.convertToUserEntity(passwordEncoder, true, roles));
         return UserQueryResponse.convertToResponse(savedUser);
     }
 
