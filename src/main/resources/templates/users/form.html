@@ -57,16 +57,35 @@
                 </div>
             </div>
 
-            <!-- TODO: Add your role toggles here. -->
-
             <div class="row">
-                <div class="col-md-12 form-group">
-                    <input type="submit" class="btn btn-primary" value="Register"/>
+                <!-- Roles Field -->
+                <div class="col-md-6 form-group" style="background-color: #4CAF50;"
+                     th:classappend="${#fields.hasErrors('roles')} ? 'has-danger' : ''">
+                    <label>Roles</label>
+                    <div>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" th:field="*{roles}" value="ROLE_USER"
+                                   class="role-checkbox"> USER</label>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" th:field="*{roles}" value="ROLE_ADMIN"
+                                   class="role-checkbox"> ADMIN</label>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" th:field="*{roles}" value="ROLE_SECURED"
+                                   class="role-checkbox"> SECURED</label>
+                    </div>
+                    <small th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}" class="form-text text-danger">Role
+                        Selection Error</small>
+                </div>
+                <div class="col-md-6 form-group">
+                    <input id="submitButton" type="submit" class="btn btn-primary btn-lg" value="Register"/>
                 </div>
             </div>
+
+
         </form>
         <script type="text/javascript">
     $(document).ready(function() {
+        // Password strength logic
         options = {
             common: {
                 minChar: 8
@@ -86,13 +105,61 @@
             }
         };
         $('#password').pwstrength(options);
+
+        // Checkbox validation logic
+        let checkboxes = $('.role-checkbox');
+        let submitButton = $('#submitButton');
+
+       function checkRolesSelected() {
+    let isAnyChecked = false;
+    checkboxes.each(function() {
+        if ($(this).prop('checked')) {
+            isAnyChecked = true;
+            return false; // break out of the .each loop
+        }
     });
+
+    if (isAnyChecked) {
+        submitButton.prop('disabled', false);
+        console.log("At least one checkbox is checked.");
+    } else {
+        submitButton.prop('disabled', true);
+        console.log("No checkboxes are checked.");
+    }
+}
+
+
 
 
 
 
 
         </script>
+        <!--        <script type="text/javascript">-->
+        <!--    $(document).ready(function() {-->
+        <!--        options = {-->
+        <!--            common: {-->
+        <!--                minChar: 8-->
+        <!--            },-->
+        <!--            ui: {-->
+        <!--                showVerdictsInsideProgressBar: true,-->
+        <!--                showErrors: true,-->
+        <!--                errorMessages: {-->
+        <!--                    wordLength: 'Your password is too short',-->
+        <!--                    wordNotEmail: 'Do not use your email as your password',-->
+        <!--                    wordSequences: 'Your password contains sequences',-->
+        <!--                    wordLowercase: 'Use lower case characters',-->
+        <!--                    wordUppercase: 'Use upper case characters',-->
+        <!--                    wordOneNumber: 'Use numbers',-->
+        <!--                    wordOneSpecialChar: 'Use special characters: [~!@#$%^&amp;*,_?]'-->
+        <!--                }-->
+        <!--            }-->
+        <!--        };-->
+        <!--        $('#password').pwstrength(options);-->
+
+
+        <!--    });-->
+        <!--        </script>-->
     </div>
 
 </div>
