@@ -3,6 +3,7 @@ package com.matiej.springsecstudy.user.controller.command;
 import com.matiej.springsecstudy.global.validators.MatchingPassword;
 import com.matiej.springsecstudy.global.validators.PasswordsValidator;
 import com.matiej.springsecstudy.user.domain.Role;
+import com.matiej.springsecstudy.user.domain.RoleType;
 import com.matiej.springsecstudy.user.domain.UserEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,10 +23,11 @@ public class CreateUserCommand extends UserCommand implements CreateUserMatchPas
     private String password;
     private String matchingPassword;
 
-    public UserEntity convertToUserEntity(PasswordEncoder passwordEncoder, boolean isEnabled) {
+    public UserEntity convertToUserEntity(PasswordEncoder passwordEncoder, boolean isEnabled, Set<Role> roles) {
         UserEntity userEntity = new UserEntity(this.username, passwordEncoder.encode(this.password),
                 passwordEncoder.encode(this.matchingPassword), this.email);
         userEntity.setEnabled(isEnabled);
+        userEntity.setRoles(roles);
         return userEntity;
     }
 
@@ -37,6 +39,4 @@ public class CreateUserCommand extends UserCommand implements CreateUserMatchPas
         userEntity.setRoles(rolesSet);
         return userEntity;
     }
-
-
 }
