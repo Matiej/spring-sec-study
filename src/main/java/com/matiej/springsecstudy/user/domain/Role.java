@@ -1,10 +1,7 @@
 package com.matiej.springsecstudy.user.domain;
 
 import com.matiej.springsecstudy.global.jpa.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.HashSet;
@@ -24,6 +21,16 @@ public class Role extends BaseEntity {
     @EqualsAndHashCode.Exclude
     @ManyToMany(mappedBy = "roles", targetEntity = UserEntity.class)
     private Set<UserEntity> userEntities = new HashSet<>();
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "roles_privileges",
+            joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "privilege_id", referencedColumnName = "id")
+    )
+    private Set<Privilege> privileges = new HashSet<>();
 
     public Role(String roleName) {
         this.roleName = roleName;
