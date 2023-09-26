@@ -1,5 +1,6 @@
 package com.matiej.springsecstudy.security;
 
+import com.matiej.springsecstudy.user.domain.Privilege;
 import com.matiej.springsecstudy.user.domain.Role;
 import com.matiej.springsecstudy.user.domain.UserEntity;
 import lombok.AllArgsConstructor;
@@ -18,10 +19,20 @@ public class UserEntityDetails implements UserDetails {
         return userEntity;
     }
 
+    //    @Override
+//    public Collection<? extends GrantedAuthority> getAuthorities() {
+//        return userEntity.getRoles().stream()
+//                .map(Role::getRoleName)
+//                .map(SimpleGrantedAuthority::new)
+//                .collect(Collectors.toSet());
+//    }
+//todo if we want base on privlages map privaleg names. This project uses only roles, here the code just to show what to do
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return userEntity.getRoles().stream()
-                .map(Role::getRoleName)
+                .flatMap(rol -> rol.getPrivileges()
+                        .stream()
+                        .map(Privilege::getName))
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toSet());
     }

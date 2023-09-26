@@ -18,7 +18,7 @@ public class UserQueryResponse {
     private Long id;
     private String username;
     private LocalDateTime createdAt;
-    private List<String> roles;
+    private List<Role> roles;
     private String email;
     private List<String> activeUsers;
 
@@ -27,7 +27,7 @@ public class UserQueryResponse {
                 .id(userEntity.getId())
                 .username(userEntity.getName())
                 .createdAt(userEntity.getCreatedAt())
-                .roles(userEntity.getRoles().stream().map(Role::getRoleName).toList())
+                .roles(userEntity.getRoles().stream().toList())
                 .email(userEntity.getUserEmail())
                 .build();
     }

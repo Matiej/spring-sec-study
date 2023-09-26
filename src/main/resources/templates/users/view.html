@@ -32,7 +32,13 @@
             <dt>-User roles:</dt>
             <dd id="roles">
                 <ul>
-                    <li th:each="role : ${user.roles}" th:text="${role}"></li>
+                    <li th:each="role : ${user.roles}">
+                        <i th:text="${role.roleName}"></i>
+                        <ul th:if="${not #lists.isEmpty(role.privileges)}">
+                            <p>--Privileges:</p>
+                            <li th:each="privilege : ${role.privileges}" th:text="${privilege.name}"></li>
+                        </ul>
+                    </li>
                 </ul>
             </dd>
         </dl>

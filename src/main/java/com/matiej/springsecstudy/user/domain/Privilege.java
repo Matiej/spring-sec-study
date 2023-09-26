@@ -15,7 +15,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class Privilege extends BaseEntity {
     @Column(unique = true)
-    private String roleName;
+    private String name;
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
@@ -28,11 +28,11 @@ public class Privilege extends BaseEntity {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Privilege privilege = (Privilege) o;
-        return Objects.equals(roleName, privilege.roleName);
+        return Objects.equals(name, privilege.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), roleName);
+        return Objects.hash(super.hashCode(), name);
     }
 }
