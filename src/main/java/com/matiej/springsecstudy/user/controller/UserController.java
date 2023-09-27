@@ -1,6 +1,5 @@
 package com.matiej.springsecstudy.user.controller;
 
-import com.matiej.springsecstudy.security.ActiveUserTrackingService;
 import com.matiej.springsecstudy.user.application.AllUsersResponse;
 import com.matiej.springsecstudy.user.application.UserQueryResponse;
 import com.matiej.springsecstudy.user.application.UserService;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 

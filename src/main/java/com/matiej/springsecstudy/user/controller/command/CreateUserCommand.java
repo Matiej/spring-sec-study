@@ -3,7 +3,6 @@ package com.matiej.springsecstudy.user.controller.command;
 import com.matiej.springsecstudy.global.validators.MatchingPassword;
 import com.matiej.springsecstudy.global.validators.PasswordsValidator;
 import com.matiej.springsecstudy.user.domain.Role;
-import com.matiej.springsecstudy.user.domain.RoleType;
 import com.matiej.springsecstudy.user.domain.UserEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

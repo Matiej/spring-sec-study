@@ -1,7 +1,6 @@
 package com.matiej.springsecstudy.security;
 
 import com.matiej.springsecstudy.user.domain.Privilege;
-import com.matiej.springsecstudy.user.domain.Role;
 import com.matiej.springsecstudy.user.domain.UserEntity;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;

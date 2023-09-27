@@ -6,7 +6,6 @@ import com.matiej.springsecstudy.user.domain.UserEntity;
 import com.matiej.springsecstudy.user.domain.UserToken;
 import jakarta.servlet.http.HttpServletRequest;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
