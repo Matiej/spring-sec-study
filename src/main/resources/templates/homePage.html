@@ -15,33 +15,36 @@
 >Welcome to spring security app logging</h1>
 <div layout:fragment="content" class="container home-container">
 
-    <hr />
+    <hr/>
+    <div class="row">
+        <div class="col-md-5 mx-auto app-description">
+            <b>User: admin, password: admin123</b>
+            <p>Description of app: Here will be nice desc about why this app has been created and what is it</p>
+        </div>
+    </div>
+    <br>
     <div class="row image-row">
         <div class="col-md-6 image-container">
-            <img th:src="@{/assets/im1.jpg}" alt="Image1" class="img-responsive" />
+            <img th:src="@{/assets/im1.jpg}" alt="Image1" class="img-responsive"/>
             <h4>BMW R1200RT 2014-2019</h4>
         </div>
         <div class="col-md-6 image-container">
-            <img th:src="@{/assets/im2.jpg}" alt="Image2" class="img-responsive" />
+            <img th:src="@{/assets/im2.jpg}" alt="Image2" class="img-responsive"/>
             <h4>BMW R1200RT 2010-2013</h4>
         </div>
     </div>
     <div class="row image-row">
         <div class="col-md-6 image-container">
-            <img th:src="@{/assets/im3.jpg}" alt="Image3" class="img-responsive" />
+            <img th:src="@{/assets/im3.jpg}" alt="Image3" class="img-responsive"/>
             <h4>Moto Guzzi V85TT 2019</h4>
         </div>
         <div class="col-md-6 image-container">
-            <img th:src="@{/assets/im1.jpg}" alt="Image4" class="img-responsive" />
+            <img th:src="@{/assets/im5.jpg}" alt="Image4" class="img-responsive"/>
             <h4>Moto Guzzi V85TT 2021</h4>
         </div>
     </div>
-    <hr />
-    <div class="row">
-        <div class="col-md-5 mx-auto app-description">
-            <p>Description of app:</p>
-        </div>
-    </div>
+    <hr/>
+
 </div>
 </body>
 </html>

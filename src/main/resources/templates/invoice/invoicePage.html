@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+    <title>Users : Create</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="icon" href="../../favicon.ico" type="image/x-icon">
+    <link th:href="@{/styles/main.css}" rel="stylesheet"/>
+    <script th:src="@{/js/jquery-1.7.2.js}"></script>
+    <script th:src="@{/js/pwstrength.js}"></script>
+</head>
+<body>
+<div class="container">
+    <h1 layout:fragment="header" class="normal-title">Secure Method Invocations with AOP - EXAMPLE</h1>
+    <div layout:fragment="content">
+
+        <div class="col-md-5 mx-auto app-description">
+            <p>Secure Method Invocations with AOP</p>
+            <p>For each user without special privileges. </p>
+            <p>But only for this one method privileges are elevated  </p>
+            <i>a few examples of when that's useful:
+               -if you don’t have access to the source code and so cannot modify it (annotate it)
+               -or if you prefer to keep all security configurations centralized in one place
+                -Now, let’s set up these config attributes manually; we’re going to use the specific method security configuration:</i>
+            <br>
+            <dt>-for SPRING BOOT 3 and Spring Security 6 the code in securityConfig looks like below</dt>
+
+        </div>
+        <dd  >
+            <img th:src="@{/assets/invoiceCode.JPG}" alt="invCode" class="img-responsive" />
+        </dd>
+    </div>
+</div>
+
+</div>
+
+</body>
+
+</html>
