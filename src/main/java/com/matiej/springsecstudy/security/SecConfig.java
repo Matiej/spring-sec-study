@@ -72,6 +72,7 @@ public class SecConfig {
             "/h2-console/**",
             "/h2-console*",
             "/reg/login", "/reg/login/**", "/reg/login*",
+            "/login", "/login/**", "/login*",
             "/reg/logout", "/reg/logout/**", "/reg/logout*",
             "/reg/pre-logout", "/reg/pre-logout/**", "/reg/pre-logout*",
             "/reg/signup",
@@ -171,7 +172,7 @@ public class SecConfig {
 
                 .formLogin()
                 .loginPage("/reg/login").permitAll()
-                .loginProcessingUrl("/do-logging")
+                .loginProcessingUrl("/reg/do-logging")
 
                 .and()
                 .rememberMe()
@@ -184,7 +185,7 @@ public class SecConfig {
                 //data base storing
                 .tokenRepository(persistentTokenRepository())
 
-//                .and().logout().permitAll().logoutUrl("/logout").logoutSuccessUrl("/reg/logout") todo -> decidet to handle it manualy to keep users name. If find another way will change
+//                .and().logout().permitAll().logoutUrl("/logout").logoutSuccessUrl("/reg/logout") todo -> decidet to handle it manualy here: /reg/pre-logout  to keep users name. If find another way will change
 
                 .and().exceptionHandling().accessDeniedHandler(customAccessDeniedHandler)
                 //Session registry part

@@ -2,14 +2,12 @@ package com.matiej.springsecstudy.security;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.session.SessionInformation;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @Slf4j
@@ -23,8 +21,8 @@ public class ActiveUserTrackingService {
 
         return allPrincipals.stream()
                 .filter(p-> !registry.getAllSessions(p, false).isEmpty()) // get all active users
-                .map(principal -> (User) principal)
-                .map(User::getUsername)
+                .map(principal -> (UserDetails) principal)
+                .map(UserDetails::getUsername)
                 .toList();
     }
 }

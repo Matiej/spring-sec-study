@@ -34,7 +34,7 @@
                 <div class="card card-body" style="background-color: #CEDECA">
                     <div th:if="${param.error}" style="color: red"><i>Invalid username and password!</i></div>
                     <div th:if="${param.logout}" style="color: black"><i>You have been logged out.</i></div>
-                    <form id="submitForm" th:action="@{/do-logging}" method="post">
+                    <form id="submitForm" th:action="@{/reg/do-logging}" method="post">
 
                         <div class="form-group required">
                             <lSabel for="username"> Enter your Name / Email</lSabel>
