@@ -5,21 +5,22 @@ create table if not exists persistent_logins (
   last_used timestamp not null
 );
 
-INSERT IGNORE INTO privilege (name, id) VALUES ('READ_PRIVILEGE', 1);
-INSERT IGNORE INTO privilege (name, id) VALUES ('UPDATE_PRIVILEGE', 2);
-INSERT IGNORE INTO privilege (name, id) VALUES ('WRITE_PRIVILEGE', 3);
-INSERT IGNORE INTO privilege (name, id) VALUES ('DELETE_PRIVILEGE', 4);
+MERGE INTO privilege (name, id, version) KEY(id) VALUES ('READ_PRIVILEGE', 1, 1);
+MERGE INTO privilege (name, id, version) KEY(id) VALUES ('UPDATE_PRIVILEGE', 2, 1);
+MERGE INTO privilege (name, id, version) KEY(id) VALUES ('WRITE_PRIVILEGE', 3, 1);
+MERGE INTO privilege (name, id, version) KEY(id) VALUES ('DELETE_PRIVILEGE', 4, 1);
 
-INSERT IGNORE INTO roles (id, role_name) VALUES
-(5, 'ROLE_USER'),
-(6, 'ROLE_ADMIN'),
-(7, 'ROLE_SECURED');
 
-insert IGNORE into roles_privileges (role_id, privilege_id) values (5, 1);
-insert IGNORE into roles_privileges (role_id, privilege_id) values (6, 1);
-insert IGNORE into roles_privileges (role_id, privilege_id) values (6, 2);
-insert IGNORE into roles_privileges (role_id, privilege_id) values (6, 3);
-insert IGNORE into roles_privileges (role_id, privilege_id) values (7, 1);
-insert IGNORE into roles_privileges (role_id, privilege_id) values (7, 2);
-insert IGNORE into roles_privileges (role_id, privilege_id) values (7, 3);
-insert IGNORE into roles_privileges (role_id, privilege_id) values (7, 4);
+MERGE INTO roles (id, role_name, version) VALUES
+(5, 'ROLE_USER',1),
+(6, 'ROLE_ADMIN',1),
+(7, 'ROLE_SECURED',1);
+
+MERGE INTO roles_privileges (role_id, privilege_id) values (5, 1);
+MERGE INTO roles_privileges (role_id, privilege_id) values (6, 1);
+MERGE INTO roles_privileges (role_id, privilege_id) values (6, 2);
+MERGE INTO roles_privileges (role_id, privilege_id) values (6, 3);
+MERGE INTO roles_privileges (role_id, privilege_id) values (7, 1);
+MERGE INTO roles_privileges (role_id, privilege_id) values (7, 2);
+MERGE INTO roles_privileges (role_id, privilege_id) values (7, 3);
+MERGE INTO roles_privileges (role_id, privilege_id) values (7, 4);

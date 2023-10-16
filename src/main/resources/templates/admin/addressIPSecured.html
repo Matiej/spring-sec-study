@@ -13,6 +13,12 @@
 <h1 layout:fragment="header">An empty IP SECURED PAGE</h1>
 <div layout:fragment="content" class="container">
     <hr>
+    <div class="row">
+        <div class="col-md-5 mx-auto app-description">
+            <p>Description of IP Secured Page:</p>
+        </div>
+    </div>
+    <hr>
     <h2>Host data:</h2>
     <dt>-IP address:</dt>
     <dd id="hostaddress" th:text="${dataMap[hostAddress]}">Username
