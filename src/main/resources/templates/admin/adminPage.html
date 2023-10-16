@@ -13,6 +13,11 @@
 <body>
 <h1 layout:fragment="header">ADMIN PAGE</h1>
 <div layout:fragment="content" class="container">
+    <div class="row">
+        <div class="col-md-5 mx-auto app-description">
+            <p>Description of Admin page:</p>
+        </div>
+    </div>
     <dt>-Username:</dt>
     <dd id="username" th:text="${user.username}">Username
     </dd>
