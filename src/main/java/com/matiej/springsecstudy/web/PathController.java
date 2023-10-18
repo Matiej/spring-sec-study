@@ -19,7 +19,7 @@ public class PathController {
 
     @RequestMapping("/cert")
     public String certPage() {
-        return "CertPage";
+        return "certPage";
     }
 
     @RequestMapping("/unauthorized")

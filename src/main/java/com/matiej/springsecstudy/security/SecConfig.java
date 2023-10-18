@@ -89,7 +89,7 @@ public class SecConfig {
             "/js/**", "/js*", "/js/",
             "/static/js/**", "/static/js*", "/static/js/",
             "/cert/", "/cert*", "/cert/**",
-            "/home/", "/home*", "/home/**"
+            "/home/", "/home*", "/home/**", "/"
     };
 
     //todo deafult at the begining.
@@ -183,10 +183,10 @@ public class SecConfig {
 //                .rememberMeCookieName(cookieName)
 //                .rememberMeParameter(cookieName)
 //                .useSecureCookie(true) doesn't work if no https. If true then cookie doesn't work and doenst keep login
-                //data base storing
+                //data base storing - // todo this option is better. I use todos for better visibility of my comments. It is learning app
                 .tokenRepository(persistentTokenRepository())
 
-//                .and().logout().permitAll().logoutUrl("/logout").logoutSuccessUrl("/reg/logout") todo -> decidet to handle it manualy here: /reg/pre-logout  to keep users name. If find another way will change
+//                .and().logout().permitAll().logoutUrl("/logout").logoutSuccessUrl("/reg/logout") todo -> decidet to handle it manualy here: /reg/pre-logout in RegistrationController  to keep users name when logout and display it the template. If find another way will change
 
                 .and().exceptionHandling().accessDeniedHandler(customAccessDeniedHandler)
                 //Session registry part
