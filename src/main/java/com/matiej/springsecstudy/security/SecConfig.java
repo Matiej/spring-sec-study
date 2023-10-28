@@ -186,7 +186,8 @@ public class SecConfig {
                 //data base storing - // todo this option is better. I use todos for better visibility of my comments. It is learning app
                 .tokenRepository(persistentTokenRepository())
 
-//                .and().logout().permitAll().logoutUrl("/logout").logoutSuccessUrl("/reg/logout") todo -> decidet to handle it manualy here: /reg/pre-logout in RegistrationController  to keep users name when logout and display it the template. If find another way will change
+//                .and().logout().permitAll().logoutUrl("/logout").logoutSuccessUrl("/reg/logout") //todo -> decidet to handle it manualy here: /reg/pre-logout in RegistrationController
+//                 todo to keep users name when logout and display it the template. If find another way will change
 
                 .and().exceptionHandling().accessDeniedHandler(customAccessDeniedHandler)
                 //Session registry part

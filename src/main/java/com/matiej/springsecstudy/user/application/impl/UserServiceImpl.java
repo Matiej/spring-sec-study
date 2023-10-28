@@ -15,6 +15,7 @@ import com.matiej.springsecstudy.user.database.UserRepository;
 import com.matiej.springsecstudy.user.database.VerificationTokenRepository;
 import com.matiej.springsecstudy.user.domain.*;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -46,10 +47,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public AllUsersResponse findAll() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println("Outside Async: " + auth);
-        System.out.println("Before async outside ->>>>>> thread name: " + Thread.currentThread().getName());
-        ascc.assync();
-        System.out.println("After async outside ->>>>>> thread name: " + Thread.currentThread().getName());
+//        System.out.println("Outside Async: " + auth);
+//        System.out.println("Before async outside ->>>>>> thread name: " + Thread.currentThread().getName());
+//        ascc.assync();
+//        System.out.println("After async outside ->>>>>> thread name: " + Thread.currentThread().getName());
         List<String> activeUsers = activeUserTrackingService.getAllActiveUsers();
         List<UserQueryResponse> userQueryResponses = UserQueryResponse.convertToResponse(userRepository.findAll());
 
@@ -177,6 +178,17 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(password));
         user.setMatchingPassword(passwordEncoder.encode(password));
         userRepository.save(user);
+    }
+
+    @Override
+    public void logout(String name, HttpSession session) {
+        SecurityContextHolder.clearContext();
+        if (session != null) {
+            session.invalidate();
+        }
+
+        activeUserTrackingService.cleanSessionRegistry(name);
+
     }
 
     private boolean isUserExist(String email) {

@@ -107,15 +107,16 @@ public class RegistrationController {
     @RequestMapping("/pre-logout")
     public String preLogout(HttpServletRequest request, RedirectAttributes redirectAttributes) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String name = auth.getName();
         if (auth != null) {
-            request.getSession().setAttribute("lastLoggedOutUsername", auth.getName());
-            redirectAttributes.addFlashAttribute("lastLoggedOutUsername", auth.getName());
+            request.getSession().setAttribute("lastLoggedOutUsername", name);
+            redirectAttributes.addFlashAttribute("lastLoggedOutUsername", name);
         }
-        SecurityContextHolder.clearContext();
+
+
         HttpSession session = request.getSession(false);
-        if (session != null) {
-            session.invalidate();
-        }
+        userService.logout(name, session);
+
         return  "redirect:/reg/logout" ;
     }
 
