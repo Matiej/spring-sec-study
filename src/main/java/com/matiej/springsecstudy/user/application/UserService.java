@@ -5,6 +5,7 @@ import com.matiej.springsecstudy.user.controller.command.ModifyUserCommand;
 import com.matiej.springsecstudy.user.domain.UserEntity;
 import com.matiej.springsecstudy.user.domain.UserToken;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 import java.util.Optional;
 
@@ -34,4 +35,6 @@ public interface UserService {
     Optional<UserToken> getPasswordResetToken(String token);
 
     void changeUserPassword(UserEntity user, String password);
+
+    void logout(String name, HttpSession session);
 }
