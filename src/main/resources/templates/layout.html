@@ -71,16 +71,17 @@
         </div>
     </nav>
     <div class="row" sec:authorize="isAuthenticated()" style="margin-top: 0px">
-        <div class="col-md-5 mx-auto app-description">
+        <div class="col-md-3 mx-auto app-description">
 
             <a class="nav-link" style="color: #62DBF6">User logged:
-                    <span sec:authentication="principal.username">No user logged</span>
+                <span sec:authentication="principal.username">No user logged</span>
             </a>
 
         </div>
         <div class="col-md-5 mx-auto app-description">
-
-            <a class="nav-link" style="color: yellow">Roles:
+            <i>Depends on what project base. This one shows privileges, </i>
+            <i>can change implementation 'public Collection< extends GrantedAuthority> getAuthorities() method' </i>
+            <a class="nav-link" style="color: yellow">Roles/Privileges:
                 <span sec:authentication="principal.authorities">roles</span>
             </a>
 

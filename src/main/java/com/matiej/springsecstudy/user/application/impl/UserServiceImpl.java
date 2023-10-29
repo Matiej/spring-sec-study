@@ -91,7 +91,7 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("There is an account with email: " + registerUserCommand.getEmail());
         }
 
-        UserEntity userEntity = registerUserCommand.convertToUserEntity(passwordEncoder, false, findRole(RoleType.USER));
+        UserEntity userEntity = registerUserCommand.convertToUserEntity(passwordEncoder, false, findRole(RoleType.ROLE_USER));
 
         String randomToken = UUID.randomUUID().toString();
         UserToken userToken = new UserToken(randomToken, userEntity, LocalDateTime.now().plusYears(2), TokenType.ACTIVATION);
