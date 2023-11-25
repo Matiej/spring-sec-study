@@ -45,7 +45,8 @@ public class RegistrationController {
             return new ModelAndView("registrationPage", "user", user);
         }
         redirectAttributes.addFlashAttribute("message", "Activation email has been sent to: " + user.getEmail());
-        return new ModelAndView("redirect:/reg/login");
+//        return new ModelAndView("redirect:/reg/login");
+        return new ModelAndView("qrcode", "user", user);
     }
 
     @GetMapping(value = "/registerConfirm")
@@ -112,11 +113,8 @@ public class RegistrationController {
             request.getSession().setAttribute("lastLoggedOutUsername", name);
             redirectAttributes.addFlashAttribute("lastLoggedOutUsername", name);
         }
-
-
         HttpSession session = request.getSession(false);
         userService.logout(name, session);
-
         return  "redirect:/reg/logout" ;
     }
 
