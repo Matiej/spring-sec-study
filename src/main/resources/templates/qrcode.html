@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorator="~{layout.html}"
+>
+<head>
+    <title>A Secured Page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="icon" href="../../favicon.ico" type="image/x-icon">
+    <link th:href="@{/styles/main.css}" rel="stylesheet"/>
+</head>
+<body>
+<h1 layout:fragment="header" class="login-title"
+>QRCODE</h1>
+<div layout:fragment="content" class="container home-container">
+
+    <hr/>
+    <div class="row">
+        <div class="col-md-5 mx-auto app-description">
+
+            <p>Description of app: Here will be nice desc about why this app has been created and what is it</p>
+        </div>
+    </div>
+    <br>
+    <input type="hidden" id="username" th:value="${user.email}"/>
+    <div id="qr">
+        <p>Scan this Barcode using Google Authenticator app on your phone to use it later in login
+            <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2">Android</a> and
+            <a href="https://itunes.apple.com/us/app/google-authenticator/id388497605">iPhone</a>
+        </p>
+    </div>
+
+
+    <a href="/login" class="btn btn-primary">Go to login page</a>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script type="text/javascript">
+$( document ).ready(function() {
+	getQRCode();
+});
+
+function getQRCode(){
+    $.get("/code?username="+$("#username").val(),function(data) {
+        console.log(data);
+        $("#qr").append('<img src="'+data.url+'" />');
+    });
+}
+
+
+</script>
+    <hr/>
+
+</div>
+</body>
+</html>

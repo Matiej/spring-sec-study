@@ -5,6 +5,7 @@ import com.matiej.springsecstudy.email.domain.EmailEntity;
 import com.matiej.springsecstudy.global.jpa.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.jboss.aerogear.security.otp.api.Base32;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -14,7 +15,6 @@ import java.util.Set;
 @Setter
 @Entity(name = "users")
 @Table(name = "users")
-@NoArgsConstructor
 public class UserEntity extends BaseEntity {
     private String name;
     @JsonIgnore // in order to not display the password anywhere
@@ -33,18 +33,24 @@ public class UserEntity extends BaseEntity {
     private Boolean enabled;
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "user", cascade = {CascadeType.MERGE,CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE})
     private Set<UserToken> tokens = new HashSet<>();
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "user", cascade = {CascadeType.MERGE,CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE})
     private Set<EmailEntity> emails = new HashSet<>();
+    private String secret;
 
     public UserEntity(String name, String password, String matchingPassword, String userEmail) {
         this.name = name;
         this.password = password;
         this.matchingPassword = matchingPassword;
         this.userEmail = userEmail;
+        this.secret = Base32.random();
+    }
+
+    public UserEntity() {
+        this.secret = Base32.random();
     }
 
     @Override
@@ -71,6 +77,7 @@ public class UserEntity extends BaseEntity {
     public void addToken(UserToken token) {
         this.tokens.add(token);
     }
+
     public void addEmail(EmailEntity email) {
         this.emails.add(email);
     }
