@@ -20,6 +20,7 @@ public class UserQueryResponse {
     private LocalDateTime createdAt;
     private List<Role> roles;
     private String email;
+    private String secret;
     private List<String> activeUsers;
 
     public static UserQueryResponse convertToResponse(UserEntity userEntity) {
@@ -29,6 +30,7 @@ public class UserQueryResponse {
                 .createdAt(userEntity.getCreatedAt())
                 .roles(userEntity.getRoles().stream().toList())
                 .email(userEntity.getUserEmail())
+                .secret(userEntity.getSecret())
                 .build();
     }
 
