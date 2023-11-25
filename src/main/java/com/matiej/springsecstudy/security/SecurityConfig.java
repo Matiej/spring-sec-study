@@ -86,13 +86,15 @@ public class SecurityConfig {
             "/reg/forgotPassword/**",
             "/reg/register/**",
             "/reg/resetPassword/**", "/reg/resetPassword*",
-            "/reg/registerConfirm/**", "/reg/registerConfirm*",
-            "/reg/changePassword/**", "/reg/changePassword*",
+            "/reg/registerConfirm/**", "/reg/registerConfirm*","/reg/registerConfirm*",
+            "/reg/changePassword/**", "/reg/changePassword*","/reg/changePassword",
             "/user/savePassword/**", "/user/savePassword*",
             "/js/**", "/js*", "/js/",
             "/static/js/**", "/static/js*", "/static/js/",
             "/cert/", "/cert*", "/cert/**",
-            "/home/", "/home*", "/home/**", "/"
+            "/home/", "/home*", "/home/**", "/",
+            "/code", "/code*", "/code/**"
+            //todo check, maybe first need to wait for email activation.
     };
 
     //todo deafult at the begining.
