@@ -1,5 +1,6 @@
 package com.matiej.springsecstudy.security;
 
+import com.matiej.springsecstudy.security.mfa.CustomWebAuthenticationDetailSource;
 import com.matiej.springsecstudy.user.application.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -49,7 +50,7 @@ import static com.matiej.springsecstudy.security.MethodSecurityConfig.KEY;
 @EnableAsync
 //todo By default, the SecurityContentHolder uses a ThreadLocal to store these details, which means that it’s transparently (and correctly) holding on to a context per thread.
 //todo The problem with that approach is that - if we’re working with @Async - the new thread will no longer be able to access to the same principal as the main thread.
-public class SecConfig {
+public class SecurityConfig {
     private final UserService userService;
     private final DefaultAdmin defaultAdmin;
     private final TestUser testUser;
@@ -59,6 +60,8 @@ public class SecConfig {
     private final LoggingFilter myCustomNewFilter;
     private final CustomAuthenticationProvider customAuthenticationProvider;
     private final SessionRegistry sessionRegistry;
+    private final CustomWebAuthenticationDetailSource customWebAuthenticationDetailSource;
+
     @Value("${app.security.cookie-token.validity.seconds}")
     private int cookieTokenValidity;
     @Value("${app.security.cookie-key}")
@@ -174,6 +177,7 @@ public class SecConfig {
                 .formLogin()
                 .loginPage("/reg/login").permitAll()
                 .loginProcessingUrl("/reg/do-logging")
+                .authenticationDetailsSource(customWebAuthenticationDetailSource) //module 12 Two-Factor Auth
 
                 .and()
                 .rememberMe()
