@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class RuAsService {
 
-    @Secured("ROLE_RUN_AS_REPORTER") //todo -> that role is very important. Prefix RUN_AS
+    @Secured({"ROLE_RUN_AS_REPORTER"}) //todo -> that role is very important. Prefix RUN_AS
     public Authentication getCurrentUser() {
         return SecurityContextHolder.getContext().getAuthentication();
     }
