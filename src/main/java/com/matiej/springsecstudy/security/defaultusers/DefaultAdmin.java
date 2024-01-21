@@ -1,25 +1,26 @@
-package com.matiej.springsecstudy.security;
+package com.matiej.springsecstudy.security.defaultusers;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Data
 @ConfigurationProperties("app.security.admin")
-public class DefaultAdmin {
-    private String username;
-    private String password;
-    private Set<String> roles;
+public class DefaultAdmin extends DefaultUser {
 
-    User adminToUser() {
+    @Override
+    public User defautUserToUser() {
+        return adminToUser();
+    }
+
+    private User adminToUser() {
         return new User(
-                this.username,
-                this.password,
-                roles.stream()
+                getUsername(),
+                getPassword(),
+                getRoles().stream()
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toSet()));
     }

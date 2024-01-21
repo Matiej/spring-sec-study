@@ -15,6 +15,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -36,9 +37,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CustomAuthenticationProvider implements AuthenticationProvider {
     private final UserService userService;
-
-    private static final String THIRD_PARTY_USER_NAME = "3rdUser";
-    private static final String THIRD_PARTY_USER_ROLE = "ROLE_SECURED";
+    private final UserEntityDetailService userEntityDetailService;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {

@@ -14,7 +14,7 @@ public class RunAsController {
     private final RuAsService ruAsService;
 
     @GetMapping
-    @Secured({"ROLE_USER", "RUN_AS_REPORTER"}) //todo RUN_AS prefix is very importat. It ruuns - runAsAuthenticationProvider() and all stuff around like service etc
+    @Secured({"ROLE_RUN_AS_REPORTER"}) //todo RUN_AS prefix is very importat. It ruuns - runAsAuthenticationProvider() and all stuff around like service etc
     public ModelAndView tryRunAs() {
         //do magic stuff for report
         // run atuh service

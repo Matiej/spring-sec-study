@@ -1,4 +1,4 @@
-package com.matiej.springsecstudy.security;
+package com.matiej.springsecstudy.security.defaultusers;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -10,16 +10,18 @@ import java.util.stream.Collectors;
 
 @Data
 @ConfigurationProperties("app.security.test-user")
-public class TestUser {
-    private String username;
-    private String password;
-    private Set<String> roles;
+public class TestUser extends DefaultUser {
 
-    User testUserToUser() {
+    @Override
+    public User defautUserToUser() {
+        return testUserToUser();
+    }
+
+    private User testUserToUser() {
         return new User(
-                this.username,
-                this.password,
-                roles.stream()
+                getUsername(),
+                getPassword(),
+                getRoles().stream()
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toSet()));
     }

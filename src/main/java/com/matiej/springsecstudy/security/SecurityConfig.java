@@ -1,5 +1,8 @@
 package com.matiej.springsecstudy.security;
 
+import com.matiej.springsecstudy.security.defaultusers.DefaultAdmin;
+import com.matiej.springsecstudy.security.defaultusers.RunAsReporterUser;
+import com.matiej.springsecstudy.security.defaultusers.TestUser;
 import com.matiej.springsecstudy.security.mfa.CustomWebAuthenticationDetailSource;
 import com.matiej.springsecstudy.user.application.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -46,7 +49,7 @@ import static com.matiej.springsecstudy.security.MethodSecurityConfig.KEY;
 //todo @EnableGlobalMethodSecurity(prePostEnabled = true) instead @EnableMethodSecurity <- this is previous version, has prePostEnabled false as default. New one as true
 @EnableMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
-@EnableConfigurationProperties({DefaultAdmin.class, TestUser.class})
+@EnableConfigurationProperties({DefaultAdmin.class, TestUser.class, RunAsReporterUser.class})
 @EnableAsync
 //todo By default, the SecurityContentHolder uses a ThreadLocal to store these details, which means that it’s transparently (and correctly) holding on to a context per thread.
 //todo The problem with that approach is that - if we’re working with @Async - the new thread will no longer be able to access to the same principal as the main thread.
@@ -54,6 +57,7 @@ public class SecurityConfig {
     private final UserService userService;
     private final DefaultAdmin defaultAdmin;
     private final TestUser testUser;
+    private final RunAsReporterUser runAsReporterUser;
     private final DataSource dataSource;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
     private final PasswordEncoder passwordEncoder;
@@ -86,8 +90,8 @@ public class SecurityConfig {
             "/reg/forgotPassword/**",
             "/reg/register/**",
             "/reg/resetPassword/**", "/reg/resetPassword*",
-            "/reg/registerConfirm/**", "/reg/registerConfirm*","/reg/registerConfirm*",
-            "/reg/changePassword/**", "/reg/changePassword*","/reg/changePassword",
+            "/reg/registerConfirm/**", "/reg/registerConfirm*", "/reg/registerConfirm*",
+            "/reg/changePassword/**", "/reg/changePassword*", "/reg/changePassword",
             "/user/savePassword/**", "/user/savePassword*",
             "/js/**", "/js*", "/js/",
             "/static/js/**", "/static/js*", "/static/js/",
@@ -113,7 +117,7 @@ public class SecurityConfig {
 //    @Bean
     public AuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-        daoAuthenticationProvider.setUserDetailsService(new UserEntityDetailService(userService, defaultAdmin, testUser));
+        daoAuthenticationProvider.setUserDetailsService(new UserEntityDetailService(userService, defaultAdmin, testUser, runAsReporterUser));
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder);
         daoAuthenticationProvider.setHideUserNotFoundExceptions(false);// these exception after that setting is not wrapped by BadCredentialsException anymore
         return daoAuthenticationProvider;

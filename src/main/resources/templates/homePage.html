@@ -19,7 +19,39 @@
     <div class="row">
         <div class="col-md-5 mx-auto app-description">
             <b>User: admin, password: admin123</b>
-            <p>Description of app: Here will be nice desc about why this app has been created and what is it</p>
+            <p>This is a training application developed for the purpose of facilitating a course and exploring spring-security. In my free time, I check it to review and refresh my knowledge.</p>
+
+            <p>There are three default users, all sharing the common password admin123:</p>
+            <ul>
+                <li>admin</li>
+                <li>tuser</li>
+                <li>runasuser</li>
+            </ul>
+
+            <h2>Website Tabs</h2>
+            <ul>
+                <li><strong>HOME</strong> – accessible to everyone</li>
+                <li><strong>Cert</strong> – accessible to everyone</li>
+                <li><strong>Users</strong> – accessible to every logged-in and authenticated user
+                    <ul>
+                        <li>To create a user, one simply needs to be logged in. Here, you can choose a role for the user.</li>
+                        <li>To delete a user, one must be ROLE_ADMIN</li>
+                    </ul>
+                </li>
+                <li><strong>Admin Settings</strong> – only accessible to ROLE_ADMIN</li>
+                <li><strong>Secured Page</strong> – only accessible to ROLE_ADMIN and ROLE_SECURED</li>
+                <li><strong>IP Secured</strong> – access possible only from the local host with IP address: 127.0.0.1</li>
+                <li><strong>AOP</strong> – ROLE_ADMIN</li>
+            </ul>
+
+            <p>Using the signup tab at <a href="http://localhost:8080/reg/signup">http://localhost:8080/reg/signup</a><br>
+                Or from the menu, click 'login' and at the bottom, you have the option to Sign up.</p>
+
+            <p>A registered user always has ROLE_USER.<br>
+                To register a user, you need to fill out the form and press the REGISTER button.<br>
+                A link for activation will be sent to the specified address. Concurrently, you will receive a BARCODE to use Google Authenticator during login.</p>
+            <b>ALL PROVIDED DATA IS DELETED ONCE A WEEK ON SUNDAYS</b>
+
         </div>
     </div>
     <br>
